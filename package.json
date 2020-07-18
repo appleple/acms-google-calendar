@@ -17,9 +17,9 @@
   "author": "appleple",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/appleple/acms-google-sheets/issues"
+    "url": "https://github.com/appleple/acms-google-calendar/issues"
   },
-  "homepage": "https://github.com/appleple/acms-google-sheets#readme",
+  "homepage": "https://github.com/appleple/acms-google-calendar#readme",
   "devDependencies": {
     "archiver": "^2.1.1",
     "co": "^4.6.0",
