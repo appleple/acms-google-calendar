@@ -100,14 +100,11 @@ class Engine
 
     protected function makeCalendarValues($field){
 
-        // 各設定項目について、チェックボックスの真偽値の配列
+        // 設定項目について、チェックボックスの真偽値の配列
         // ablog cms カスタムフィールドを使用：true
         // ablog cms カスタムフィールドを使用しない：false
         // $checkItems:bool[]
         $checkItems = array(
-            //'calendar_event_title' => $this->config->get('calendar_event_title_check'),
-            //'calendar_event_location' => $this->config->get('calendar_event_location_check'),
-            //'calendar_event_description' => $this->config->get('calendar_event_description_check'),
             'calendar_start_date' => $this->config->get('calendar_start_date_check'),
             'calendar_start_time' => $this->config->get('calendar_start_time_check'),
             'calendar_end_date' => $this->config->get('calendar_end_date_check'),
@@ -132,15 +129,12 @@ class Engine
         // $values:string[]
         $values = array(
             // 予定タイトル
-            //'summary' => $checkItems["calendar_event_title"] ? $field->get($formItems["calendar_event_title"]) : $formItems["calendar_event_title"],
             'summary' => Common::getMailTxtFromTxt($formItems["calendar_event_title"], $field),
 
             // 予定場所
-            //'location' => $checkItems["calendar_event_location"] ? $field->get($formItems["calendar_event_location"]) : $formItems["calendar_event_location"],
             'location' => Common::getMailTxtFromTxt($formItems["calendar_event_location"], $field),
 
             // 予定説明
-            //'description' => $checkItems["calendar_event_description"] ? $field->get($formItems["calendar_event_description"]) : $formItems["calendar_event_description"],
             'description' => Common::getMailTxtFromTxt($formItems["calendar_event_description"], $field),
 
             // 開始時刻 yy-mm-ddT00:00:00timezone

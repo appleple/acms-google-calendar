@@ -3,11 +3,6 @@
 	<tr>
 	  <th>イベントタイトル<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="GoogleCalendarイベント名に対応する a-blog cms のカスタムフィールド名を指定します"></i></th>
 	  <td>
-		<!--<div class="acms-admin-form-checkbox">
-			<input type="checkbox" name="calendar_event_title_check[]" value="true" id="calendar_event_title_check-true"{calendar_event_title_check:checked#true} />
-			<label for="calendar_event_title_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と連携する</label>
-			<input type="hidden" name="mail[]" value="calendar_event_title_check" />
-		</div>-->
 		<input type="text" name="calendar_event_title" value="{calendar_event_title}" class="acms-admin-form-width-full" />
 		<input type="hidden" name="mail[]" value="calendar_event_title" />
 	  </td>
@@ -15,11 +10,6 @@
 	<tr>
 		<th>場所<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="GoogleCalendarイベント場所に対応する a-blog cms のカスタムフィールド名を指定します"></i></th>
 		<td>
-			<!--<div class="acms-admin-form-checkbox">
-				<input type="checkbox" name="calendar_event_location_check[]" value="true" id="calendar_event_location_check-true"{calendar_event_location_check:checked#true} />
-				<label for="calendar_event_location_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と連携する</label>
-				<input type="hidden" name="mail[]" value="calendar_event_location_check" />
-			</div>-->
 		  <input type="text" name="calendar_event_location" value="{calendar_event_location}" class="acms-admin-form-width-full" />
 		  <input type="hidden" name="mail[]" value="calendar_event_location" />
 		</td>
@@ -27,13 +17,7 @@
 	<tr>
 		<th>説明<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="GoogleCalendarイベント説明に対応する a-blog cms のカスタムフィールド名を指定します"></i></th>
 		<td>
-			<!--<div class="acms-admin-form-checkbox">
-				<input type="checkbox" name="calendar_event_description_check[]" value="true" id="calendar_event_description_check-true"{calendar_event_description_check:checked#true} />
-				<label for="calendar_event_description_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と連携する</label>
-				<input type="hidden" name="mail[]" value="calendar_event_description_check" />
-			</div>-->
 			<textarea name="calendar_event_description" class="acms-admin-form-width-full" rows="10">{calendar_event_description}</textarea>
-		  <!--<input type="text" name="calendar_event_description" value="{calendar_event_description}" class="acms-admin-form-width-full" />-->
 		  <input type="hidden" name="mail[]" value="calendar_event_description" />
 		</td>
 	</tr>
@@ -46,7 +30,7 @@
 				<input type="hidden" name="mail[]" value="calendar_start_date" />
 				<div class="acms-admin-form-checkbox acms-admin-action-spacer">
 					<input type="checkbox" name="calendar_start_date_check[]" value="true" id="calendar_start_date_check-true"{calendar_start_date_check:checked#true} />
-					<label for="calendar_start_date_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と連携する</label>
+					<label for="calendar_start_date_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と使用する</label>
 					<input type="hidden" name="mail[]" value="calendar_start_date_check" />
 				</div>
 			</div>
@@ -60,7 +44,7 @@
 				<input type="hidden" name="mail[]" value="calendar_start_time" />
 				<div class="acms-admin-form-checkbox acms-admin-action-spacer">
 					<input type="checkbox" name="calendar_start_time_check[]" value="true" id="calendar_start_time_check-true"{calendar_start_time_check:checked#true} />
-					<label for="calendar_start_time_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と連携する</label>
+					<label for="calendar_start_time_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と使用する</label>
 					<input type="hidden" name="mail[]" value="calendar_start_time_check" />
 				</div>
 			</div>
@@ -74,7 +58,7 @@
 				<input type="hidden" name="mail[]" value="calendar_end_date" />
 				<div class="acms-admin-form-checkbox acms-admin-action-spacer">
 					<input type="checkbox" name="calendar_end_date_check[]" value="true" id="calendar_end_date_check-true"{calendar_end_date_check:checked#true} />
-					<label for="calendar_end_date_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と連携する</label>
+					<label for="calendar_end_date_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と使用する</label>
 					<input type="hidden" name="mail[]" value="calendar_end_date_check" />
 				</div>
 			</div>
@@ -88,7 +72,7 @@
 				<input type="hidden" name="mail[]" value="calendar_end_time" />
 				<div class="acms-admin-form-checkbox acms-admin-action-spacer">
 					<input type="checkbox" name="calendar_end_time_check[]" value="true" id="calendar_end_time_check-true"{calendar_end_time_check:checked#true} />
-					<label for="calendar_end_time_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と連携する</label>
+					<label for="calendar_end_time_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と使用する</label>
 					<input type="hidden" name="mail[]" value="calendar_end_time_check" />
 				</div>
 			</div>
@@ -102,74 +86,13 @@
 				<input type="hidden" name="mail[]" value="calendar_event_timeZone" />
 				<div class="acms-admin-form-checkbox acms-admin-action-spacer">
 					<input type="checkbox" name="calendar_event_timeZone_check[]" value="true" id="calendar_event_timeZone_check-true"{calendar_event_timeZone_check:checked#true} />
-					<label for="calendar_event_timeZone_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と連携する</label>
+					<label for="calendar_event_timeZone_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と使用する</label>
 					<input type="hidden" name="mail[]" value="calendar_event_timeZone_check" />
 				</div>
 			</div>
 		</td>
 	</tr>
 
-	<!--
-	<tr>
-	  <th>開始日付<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="GoogleCalendarイベント開始日に対応する a-blog cms のカスタムフィールド名を指定します(この項目は必須です。この入力がない場合カレンダーにイベントが登録されません)"></i></th>
-	  <td>
-		<div class="acms-admin-form-checkbox">
-			<input type="checkbox" name="calendar_start_date_check[]" value="true" id="calendar_start_date_check-true"{calendar_start_date_check:checked#true} />
-			<label for="calendar_start_date_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と連携する</label>
-			<input type="hidden" name="mail[]" value="calendar_start_date_check" />
-		</div>
-		<input type="text" name="calendar_start_date" value="{calendar_start_date}" class="acms-admin-form-width-full" />
-		<input type="hidden" name="mail[]" value="calendar_start_date" />
-	  </td>
-	</tr>
-	<tr>
-	  <th>開始時間<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="GoogleCalendarイベント開始時刻に対応する a-blog cms のカスタムフィールド名を指定します(この項目は必須です。この入力がない場合カレンダーにイベントが登録されません)"></i></th>
-	  <td>
-		<div class="acms-admin-form-checkbox">
-			<input type="checkbox" name="calendar_start_time_check[]" value="true" id="calendar_start_time_check-true"{calendar_start_time_check:checked#true} />
-			<label for="calendar_start_time_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と連携する</label>
-			<input type="hidden" name="mail[]" value="calendar_start_time_check" />
-		</div>
-		<input type="text" name="calendar_start_time" value="{calendar_start_time}" class="acms-admin-form-width-full" />
-		<input type="hidden" name="mail[]" value="calendar_start_time" />
-	  </td>
-	</tr>
-	<tr>
-	  <th>終了日付<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="GoogleCalendarイベント終了日に対応する a-blog cms のカスタムフィールド名を指定します(この項目は必須です。この入力がない場合カレンダーにイベントが登録されません)"></i></th>
-	  <td>
-		<div class="acms-admin-form-checkbox">
-			<input type="checkbox" name="calendar_end_date_check[]" value="true" id="calendar_end_date_check-true"{calendar_end_date_check:checked#true} />
-			<label for="calendar_end_date_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と連携する</label>
-			<input type="hidden" name="mail[]" value="calendar_end_date_check" />
-		</div>
-		<input type="text" name="calendar_end_date" value="{calendar_end_date}" class="acms-admin-form-width-full" />
-		<input type="hidden" name="mail[]" value="calendar_end_date" />
-	  </td>
-	</tr>
-	<tr>
-	  <th>終了時間<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="GoogleCalendarイベント終了時刻に対応する a-blog cms のカスタムフィールド名を指定します(この項目は必須です。この入力がない場合カレンダーにイベントが登録されません)"></i></th>
-	  <td>
-		<div class="acms-admin-form-checkbox">
-			<input type="checkbox" name="calendar_end_time_check[]" value="true" id="calendar_end_time_check-true"{calendar_end_time_check:checked#true} />
-			<label for="calendar_end_time_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と連携する</label>
-			<input type="hidden" name="mail[]" value="calendar_end_time_check" />
-		</div>
-		<input type="text" name="calendar_end_time" value="{calendar_end_time}" class="acms-admin-form-width-full" />
-		<input type="hidden" name="mail[]" value="calendar_end_time" />
-	  </td>
-	</tr>
-	<tr>
-		<th>タイムゾーン<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="GoogleCalendarイベントのタイムゾーンをIANA Time Zone Database name を用いて指定します。例：Asia/Tokyo(この項目は必須です。この入力がない場合カレンダーにイベントが登録されません)"></i></th>
-		<td>
-			<div class="acms-admin-form-checkbox">
-				<input type="checkbox" name="calendar_event_timeZone_check[]" value="true" id="calendar_event_timeZone_check-true"{calendar_event_timeZone_check:checked#true} />
-				<label for="calendar_event_timeZone_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールド名と連携する</label>
-				<input type="hidden" name="mail[]" value="calendar_event_timeZone_check" />
-			</div>
-		  <input type="text" name="calendar_event_timeZone" value="{calendar_event_timeZone}" class="acms-admin-form-width-full" />
-		  <input type="hidden" name="mail[]" value="calendar_event_timeZone" />
-		</td>
-	</tr>-->
 </table>
 
 <h2 class="acms-admin-admin-title2">Google Calendar Form 設定</h2>
