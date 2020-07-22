@@ -118,6 +118,7 @@ class Engine
             'calendar_event_title' => $this->config->get('calendar_event_title'),
             'calendar_event_location' => $this->config->get('calendar_event_location'),
             'calendar_event_description' => $this->config->get('calendar_event_description'),
+            'calendar_event_attendees' => $this->config->get('calendar_event_attendees'),
             'calendar_start_date' => $this->config->get('calendar_start_date'),
             'calendar_start_time' => $this->config->get('calendar_start_time'),
             'calendar_end_date' => $this->config->get('calendar_end_date'),
@@ -148,10 +149,36 @@ class Engine
                 'dateTime' => $this->trueORfalse($checkItems["calendar_end_date"], $field->get($formItems["calendar_end_date"]), $formItems["calendar_end_date"])."T".$this->trueORfalse($checkItems["calendar_end_time"], $field->get($formItems["calendar_end_time"]), $formItems["calendar_end_time"]), // 終了日時
                 'timeZone' => $formItems["calendar_event_timeZone"],
             ),
+
+            // 参加者
+            'attendees' => $this->makeAttendeesValue($formItems["calendar_event_attendees"], $field),
+
         );
         return $values;
     }
-    
+
+    // GoogleCalendarに送信する attendees の array を作成する
+    // example: 'example@hotmail.co.jp, example@gmail.com, example@yahoo.co.jp'
+    /*  becomes: array(
+        array('email' => 'example@hotmail.co.jp),
+        array('email' => 'example@gmail.com'),
+        array('email' => 'example@yahoo.co.jp'),
+    )*/
+    // @return string[]
+    private function makeAttendeesValue($attendeesTpl, $field){
+        $str = Common::getMailTxtFromTxt($attendeesTpl, $field);
+
+        // 空白文字(全角・半角)を削除
+        $str = str_replace(array(" ", "　"), "", $str);
+
+        $attendees = explode(',', $str);
+        $array = array();
+        foreach ($attendees as $attendee) {
+            array_push($array,array('email' => $attendee));
+        }
+        return $array;
+    }
+
     // 第一引数の値がtrueの時、第二引数を、falseの時第三引数を返す関数
     // $a:bool, $b,$c:any
     private function trueORfalse($a, $b, $c){
