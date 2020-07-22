@@ -9,6 +9,9 @@
     "php": ">=5.3.3",
     "google/apiclient": "^2.0"
   },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
   "config": {
     "vendor-dir": "vendor",
     "platform": {

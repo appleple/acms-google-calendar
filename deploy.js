@@ -66,7 +66,7 @@ co(function* () {
     fs.copySync(`./POST`, `GoogleCalendar/POST`);
     fs.copySync(`./theme`, `GoogleCalendar/theme`);
     fs.copySync(`./ServiceProvider.php`, `GoogleCalendar/ServiceProvider.php`);
-    yield systemCmd(`cd ./GoogleCalendar; composer install`);
+    yield systemCmd(`cd ./GoogleCalendar; composer install --no-dev`);
     yield zipPromise(`GoogleCalendar`, `./build/GoogleCalendar.zip`);
     fs.removeSync(`GoogleCalendar`);
     yield systemCmd('git add -A');
