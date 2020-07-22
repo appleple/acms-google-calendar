@@ -153,6 +153,12 @@ class Engine
             // 参加者
             'attendees' => $this->makeAttendeesValue($formItems["calendar_event_attendees"], $field),
 
+            // リマインダー
+            // 現在off 
+            // 通知設定機能の実装を検討中
+            'reminders' => array(
+                'useDefault' => FALSE,
+            ),
         );
         return $values;
     }
