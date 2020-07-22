@@ -138,28 +138,23 @@ class Engine
             // 予定説明
             'description' => Common::getMailTxtFromTxt($formItems["calendar_event_description"], $field),
 
-            // 開始時刻 yy-mm-ddT00:00:00timezone
-            'start' => array(
-                'dateTime' => $this->trueORfalse($checkItems["calendar_start_date"], $field->get($formItems["calendar_start_date"]), $formItems["calendar_start_date"])."T".$this->trueORfalse($checkItems["calendar_start_time"], $field->get($formItems["calendar_start_time"]), $formItems["calendar_start_time"]),// 開始日時
-                'timeZone' => $formItems["calendar_event_timeZone"],
-            ),
-
-            // 終了時刻
-            'end' => array(
-                'dateTime' => $this->trueORfalse($checkItems["calendar_end_date"], $field->get($formItems["calendar_end_date"]), $formItems["calendar_end_date"])."T".$this->trueORfalse($checkItems["calendar_end_time"], $field->get($formItems["calendar_end_time"]), $formItems["calendar_end_time"]), // 終了日時
-                'timeZone' => $formItems["calendar_event_timeZone"],
-            ),
-
             // 参加者
             'attendees' => $this->makeAttendeesValue($formItems["calendar_event_attendees"], $field),
 
             // リマインダー
-            // 現在off 
+            // 現在off
             // 通知設定機能の実装を検討中
             'reminders' => array(
                 'useDefault' => FALSE,
             ),
         );
+        $values = $this->makeDateValue($values, array(
+            'startDate' => array('bool'=>$checkItems["calendar_start_date"], 'start_date'=>$formItems["calendar_start_date"]),
+            'startTime' => array('bool'=>$checkItems["calendar_start_time"], 'start_time'=>$formItems["calendar_start_time"]),
+            'endDate' => array('bool'=>$checkItems["calendar_end_date"], 'end_date'=>$formItems["calendar_end_date"]),
+            'endTime' => array('bool'=>$checkItems["calendar_end_time"], 'end_time'=>$formItems["calendar_end_time"]),
+            'timeZone' => $formItems["calendar_event_timeZone"],
+        ), $field);
         return $values;
     }
 
@@ -171,7 +166,7 @@ class Engine
         array('email' => 'example@yahoo.co.jp'),
     )*/
     // @return string[]
-    private function makeAttendeesValue($attendeesTpl, $field){
+    private function makeAttendeesValue($attendeesTpl, $field) {
         $str = Common::getMailTxtFromTxt($attendeesTpl, $field);
 
         // 空白文字(全角・半角)を削除
@@ -183,6 +178,68 @@ class Engine
             array_push($array,array('email' => $attendee));
         }
         return $array;
+    }
+
+    private function makeDateValue($value, $dateMixArray, $field) {
+        $startDate = $this->trueORfalse($dateMixArray["startDate"]["bool"], $field->get($dateMixArray["startDate"]["start_date"]), $dateMixArray["startDate"]["start_date"]);
+        $startTime = $this->trueORfalse($dateMixArray["startTime"]["bool"], $field->get($dateMixArray["startTime"]["start_time"]), $dateMixArray["startTime"]["start_time"]);
+
+        // ここから終了日時を計算する
+        if ($dateMixArray["endDate"]["end_date"]=="" || substr($dateMixArray["endDate"]["end_date"], 0, 1)=="+") {
+            if ($dateMixArray["endDate"]["end_date"]=="") {
+                $endDate = $startDate;
+            } else {
+                $endDate = str_replace(array("+"), "", $dateMixArray["endDate"]["end_date"]);
+                $addedDate = $this->addDateTime($startDate." ".$startTime, $endDate." 0:0:0");
+                $endDate = explode(':', $addedDate)[0];
+            }
+        } else {
+            $endDate = $this->trueORfalse($dateMixArray["endDate"]["bool"], $field->get($dateMixArray["endDate"]["end_date"]), $dateMixArray["endDate"]["end_date"]);
+        }
+
+        if ($dateMixArray["endTime"]["end_time"]=="" || substr($dateMixArray["endTime"]["end_time"], 0, 1)=="+") {
+            if (substr($dateMixArray["endTime"]["end_time"], 0, 1)=="+") {
+                $endTime = str_replace(array("+"), "", $dateMixArray["endTime"]["end_time"]);
+                $addedDate = $this->addDateTime($startDate." ".$startTime, "0-0-0 ".$endTime);
+                $addedDates = explode(" ", $addedDate);
+                $endDate = $addedDates[0];
+                $endTime = $addedDates[1];
+            } else {
+                $addedDate = $this->addDateTime($startDate." ".$startTime, "0-0-0 1:0:0");
+                $addedDates = explode(" ", $addedDate);
+                $endDate = $addedDates[0];
+                $endTime = $addedDates[1];
+            }
+        } else {
+            $endTime = $this->trueORfalse($dateMixArray["endTime"]["bool"], $field->get($dateMixArray["endTime"]["end_time"]), $dateMixArray["endTime"]["end_time"]);
+        }
+
+        // $value に日付情報を格納
+        $value += array("start" => array(
+            "dateTime" => $startDate."T".$startTime,
+            "timeZone" => $dateMixArray["timeZone"],
+        ));
+
+        $value += array("end" => array(
+            "dateTime" => $endDate."T".$endTime,
+            "timeZone" => $dateMixArray["timeZone"],
+        ));
+        return $value;
+    }
+
+    // y-m-d h:i:s 形式
+    private function addDateTime($date, $dateTime) {
+        $dateSplit = str_replace([" ", ":"], "-", $date);
+        $dateSplit = explode("-", $dateSplit);
+        $dateTimeSplit = str_replace([" ", ":"], "-", $dateTime);
+        $dateTimeSplit = explode("-", $dateTimeSplit);
+        $hour = $dateSplit[3]+$dateTimeSplit[3];
+        $min = $dateSplit[4]+$dateTimeSplit[4];
+        $sec = $dateSplit[5]+$dateTimeSplit[5];
+        $month = $dateSplit[1]+$dateTimeSplit[1];
+        $day = $dateSplit[2]+$dateTimeSplit[2];
+        $year = $dateSplit[0]+$dateTimeSplit[0];
+        return date("Y-m-d H:i:s", mktime($hour, $min, $sec, $month, $day, $year));
     }
 
     // 第一引数の値がtrueの時、第二引数を、falseの時第三引数を返す関数
