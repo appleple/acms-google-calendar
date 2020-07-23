@@ -55,6 +55,116 @@ class EnginTest extends TestCase {
             array('email' => 'example@yahoo.co.jp'),
         ), $response);
     }
+
+    public function testMakeDateValue() {
+        $response = $this->$engin->makeDateValue([],array(
+            'startDateValue' => '2020-07-01',
+            'startTimeValue' => '12:00:00',
+            'endDateValue' => '',
+            'endTimeValue' => '+01:00:00',
+            'timeZoneValue' => 'Asia/Tokyo',
+        ));
+        $this->assertEquals(array(
+            "start" => array(
+                "dateTime" => "2020-07-01T12:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+            "end" => array(
+                "dateTime" => "2020-07-01T13:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+        ), $response);
+
+        $response = $this->$engin->makeDateValue([],array(
+            'startDateValue' => '2020-07-01',
+            'startTimeValue' => '12:00:00',
+            'endDateValue' => '',
+            'endTimeValue' => '',
+            'timeZoneValue' => 'Asia/Tokyo',
+        ));
+        $this->assertEquals(array(
+            "start" => array(
+                "dateTime" => "2020-07-01T12:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+            "end" => array(
+                "dateTime" => "2020-07-01T13:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+        ), $response);
+
+        $response = $this->$engin->makeDateValue([],array(
+            'startDateValue' => '2020-07-01',
+            'startTimeValue' => '12:00:00',
+            'endDateValue' => '2020-07-02',
+            'endTimeValue' => '10:00:00',
+            'timeZoneValue' => 'Asia/Tokyo',
+        ));
+        $this->assertEquals(array(
+            "start" => array(
+                "dateTime" => "2020-07-01T12:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+            "end" => array(
+                "dateTime" => "2020-07-02T10:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+        ), $response);
+
+        $response = $this->$engin->makeDateValue([],array(
+            'startDateValue' => '2020-07-01',
+            'startTimeValue' => '12:00:00',
+            'endDateValue' => '2020-07-02',
+            'endTimeValue' => '+01:00:00',
+            'timeZoneValue' => 'Asia/Tokyo',
+        ));
+        $this->assertEquals(array(
+            "start" => array(
+                "dateTime" => "2020-07-01T12:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+            "end" => array(
+                "dateTime" => "2020-07-02T13:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+        ), $response);
+
+        $response = $this->$engin->makeDateValue([],array(
+            'startDateValue' => '2020-07-01',
+            'startTimeValue' => '12:00:00',
+            'endDateValue' => '+1',
+            'endTimeValue' => '',
+            'timeZoneValue' => 'Asia/Tokyo',
+        ));
+        $this->assertEquals(array(
+            "start" => array(
+                "dateTime" => "2020-07-01T12:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+            "end" => array(
+                "dateTime" => "2020-07-02T12:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+        ), $response);
+
+        $response = $this->$engin->makeDateValue([],array(
+            'startDateValue' => '2020-07-01',
+            'startTimeValue' => '12:00:00',
+            'endDateValue' => '+1',
+            'endTimeValue' => '+01:00:00',
+            'timeZoneValue' => 'Asia/Tokyo',
+        ));
+        $this->assertEquals(array(
+            "start" => array(
+                "dateTime" => "2020-07-01T12:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+            "end" => array(
+                "dateTime" => "2020-07-02T13:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+        ), $response);
+    }
 }
 
 /**
