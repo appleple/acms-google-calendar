@@ -1,38 +1,59 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 
 class EnginTest extends TestCase {
-    public function testAddDateTime() {
-        $engin = $this->mkInstanceWithoutConstructior();
-        $response = $engin->addDateTime("2020-7-8 10:00:00", "0-0-0 1:0:0");
-        $this->assertEquals("2020-07-08 11:00:00", $response);
-
-        $response = $engin->addDateTime("2020-7-8 10:00:00", "00-00-00 01:00:00");
-        $this->assertEquals("2020-07-08 11:00:00", $response);
-
-        $response = $engin->addDateTime("2020-7-8 10:00:00", "00-00-00 01:20:40");
-        $this->assertEquals("2020-07-08 11:20:40", $response);
-
-        $response = $engin->addDateTime("2020-7-8 10:00:00", "10-10-10 01:00:00");
-        $this->assertEquals("2031-05-18 11:00:00", $response);
-
-        $response = $engin->addDateTime("2020-7-8 10:00:00", "00-00-00 20:00:00");
-        $this->assertEquals("2020-07-09 06:00:00", $response);
-    }
 
     /**
-     * create Engin instance with out constructor
+     * create Engin instance without constructor
      */
-    public function mkInstanceWithoutConstructior()
-    {
-        require dirname(__FILE__)."/../Engine.php";
+    public function setUp() {
+        require_once dirname(__FILE__)."/../Engine.php";
         // ReflectionClassをテスト対象のクラスをもとに作る.
         $reflection = new ReflectionClass("Acms\Plugins\GoogleCalendar\Engine");
         $targetInstance = $reflection->newInstanceWithoutConstructor();
-        $testInstance = new MethodTester($targetInstance);
-        return $testInstance;
+        $this->$engin = new MethodTester($targetInstance);
+    }
+
+    public function testAddDateTime() {
+        $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "0-0-0 1:0:0");
+        $this->assertEquals("2020-07-08 11:00:00", $response);
+
+        $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "00-00-00 01:00:00");
+        $this->assertEquals("2020-07-08 11:00:00", $response);
+
+        $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "00-00-00 01:20:40");
+        $this->assertEquals("2020-07-08 11:20:40", $response);
+
+        $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "10-10-10 01:00:00");
+        $this->assertEquals("2031-05-18 11:00:00", $response);
+
+        $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "00-00-00 20:00:00");
+        $this->assertEquals("2020-07-09 06:00:00", $response);
+    }
+
+    public function testmakeAttendeesValue() {
+        $response = $this->$engin->makeAttendeesValue('example@hotmail.co.jp, example@gmail.com, example@yahoo.co.jp');
+        $this->assertEquals(array(
+            array('email' => 'example@hotmail.co.jp'),
+            array('email' => 'example@gmail.com'),
+            array('email' => 'example@yahoo.co.jp'),
+        ), $response);
+
+        $response = $this->$engin->makeAttendeesValue('example@hotmail.co.jp');
+        $this->assertEquals(array(
+            array('email' => 'example@hotmail.co.jp'),
+        ), $response);
+
+        $response = $this->$engin->makeAttendeesValue('');
+        $this->assertEquals(array(array('email' => '')), $response);
+
+        $response = $this->$engin->makeAttendeesValue('example@hotmail.co.jp, あいう, example@yahoo.co.jp');
+        $this->assertEquals(array(
+            array('email' => 'example@hotmail.co.jp'),
+            array('email' => 'あいう'),
+            array('email' => 'example@yahoo.co.jp'),
+        ), $response);
     }
 }
 
