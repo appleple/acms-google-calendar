@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class EnginTest extends TestCase {
+class AddDateTimeTest extends TestCase {
 
     /**
      * create Engin instance without constructor
@@ -15,24 +15,40 @@ class EnginTest extends TestCase {
         $this->$engin = new MethodTester($targetInstance);
     }
 
-    public function testAddDateTime() {
+    public function testAddHour() {
         $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "0-0-0 1:0:0");
         $this->assertEquals("2020-07-08 11:00:00", $response);
 
         $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "00-00-00 01:00:00");
         $this->assertEquals("2020-07-08 11:00:00", $response);
+    }
 
+    public function testAddMin() {
         $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "00-00-00 01:20:40");
         $this->assertEquals("2020-07-08 11:20:40", $response);
+    }
 
+    public function testAddYear() {
         $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "10-10-10 01:00:00");
         $this->assertEquals("2031-05-18 11:00:00", $response);
+    }
 
+    public function testAddedDateSpreadsAcrossTwodays() {
         $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "00-00-00 20:00:00");
         $this->assertEquals("2020-07-09 06:00:00", $response);
     }
+}
 
-    public function testmakeAttendeesValue() {
+class MakeAttendeesValueTest extends TestCase {
+    public function setUp() {
+        require_once dirname(__FILE__)."/../Engine.php";
+        // ReflectionClassをテスト対象のクラスをもとに作る.
+        $reflection = new ReflectionClass("Acms\Plugins\GoogleCalendar\Engine");
+        $targetInstance = $reflection->newInstanceWithoutConstructor();
+        $this->$engin = new MethodTester($targetInstance);
+    }
+
+    public function testMakeAttendeesValue() {
         $response = $this->$engin->makeAttendeesValue('example@hotmail.co.jp, example@gmail.com, example@yahoo.co.jp');
         $this->assertEquals(array(
             array('email' => 'example@hotmail.co.jp'),
@@ -55,8 +71,18 @@ class EnginTest extends TestCase {
             array('email' => 'example@yahoo.co.jp'),
         ), $response);
     }
+}
 
-    public function testMakeDateValue() {
+class MakeDateValueTest extends TestCase {
+    public function setUp() {
+        require_once dirname(__FILE__)."/../Engine.php";
+        // ReflectionClassをテスト対象のクラスをもとに作る.
+        $reflection = new ReflectionClass("Acms\Plugins\GoogleCalendar\Engine");
+        $targetInstance = $reflection->newInstanceWithoutConstructor();
+        $this->$engin = new MethodTester($targetInstance);
+    }
+
+    public function testAddHour() {
         $response = $this->$engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
@@ -74,7 +100,9 @@ class EnginTest extends TestCase {
                 "timeZone" => "Asia/Tokyo",
             ),
         ), $response);
+    }
 
+    public function testBlankDateTime() {
         $response = $this->$engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
@@ -92,7 +120,9 @@ class EnginTest extends TestCase {
                 "timeZone" => "Asia/Tokyo",
             ),
         ), $response);
-
+    }
+    
+    public function testFillDateTime() {
         $response = $this->$engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
@@ -110,7 +140,9 @@ class EnginTest extends TestCase {
                 "timeZone" => "Asia/Tokyo",
             ),
         ), $response);
+    }
 
+    public function testFillDateAddTime() {
         $response = $this->$engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
@@ -128,7 +160,9 @@ class EnginTest extends TestCase {
                 "timeZone" => "Asia/Tokyo",
             ),
         ), $response);
+    }
 
+    public function testAddDate() {
         $response = $this->$engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
@@ -146,7 +180,9 @@ class EnginTest extends TestCase {
                 "timeZone" => "Asia/Tokyo",
             ),
         ), $response);
+    }
 
+    public function testAddDateAddTime() {
         $response = $this->$engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
@@ -165,7 +201,7 @@ class EnginTest extends TestCase {
             ),
         ), $response);
     }
-}
+}    
 
 /**
  * https://www.agent-grow.com/self20percent/2018/05/09/phpunit_testing_private_and_protected_methods/
