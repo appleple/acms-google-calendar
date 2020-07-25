@@ -9,32 +9,29 @@ class AddDateTimeTest extends TestCase {
      */
     public function setUp() {
         require_once dirname(__FILE__)."/../Engine.php";
-        // ReflectionClassをテスト対象のクラスをもとに作る.
-        $reflection = new ReflectionClass("Acms\Plugins\GoogleCalendar\Engine");
-        $targetInstance = $reflection->newInstanceWithoutConstructor();
-        $this->$engin = new MethodTester($targetInstance);
+        $this->engin = new DummyClass("Acms\Plugins\GoogleCalendar\Engine");
     }
 
     public function testAddHour() {
-        $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "0-0-0 1:0:0");
+        $response = $this->engin->addDateTime("2020-7-8 10:00:00", "0-0-0 1:0:0");
         $this->assertEquals("2020-07-08 11:00:00", $response);
 
-        $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "00-00-00 01:00:00");
+        $response = $this->engin->addDateTime("2020-7-8 10:00:00", "00-00-00 01:00:00");
         $this->assertEquals("2020-07-08 11:00:00", $response);
     }
 
     public function testAddMin() {
-        $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "00-00-00 01:20:40");
+        $response = $this->engin->addDateTime("2020-7-8 10:00:00", "00-00-00 01:20:40");
         $this->assertEquals("2020-07-08 11:20:40", $response);
     }
 
     public function testAddYear() {
-        $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "10-10-10 01:00:00");
+        $response = $this->engin->addDateTime("2020-7-8 10:00:00", "10-10-10 01:00:00");
         $this->assertEquals("2031-05-18 11:00:00", $response);
     }
 
     public function testAddedDateSpreadsAcrossTwodays() {
-        $response = $this->$engin->addDateTime("2020-7-8 10:00:00", "00-00-00 20:00:00");
+        $response = $this->engin->addDateTime("2020-7-8 10:00:00", "00-00-00 20:00:00");
         $this->assertEquals("2020-07-09 06:00:00", $response);
     }
 }
@@ -42,29 +39,26 @@ class AddDateTimeTest extends TestCase {
 class MakeAttendeesValueTest extends TestCase {
     public function setUp() {
         require_once dirname(__FILE__)."/../Engine.php";
-        // ReflectionClassをテスト対象のクラスをもとに作る.
-        $reflection = new ReflectionClass("Acms\Plugins\GoogleCalendar\Engine");
-        $targetInstance = $reflection->newInstanceWithoutConstructor();
-        $this->$engin = new MethodTester($targetInstance);
+        $this->engin = new DummyClass("Acms\Plugins\GoogleCalendar\Engine");
     }
 
     public function testMakeAttendeesValue() {
-        $response = $this->$engin->makeAttendeesValue('example@hotmail.co.jp, example@gmail.com, example@yahoo.co.jp');
+        $response = $this->engin->makeAttendeesValue('example@hotmail.co.jp, example@gmail.com, example@yahoo.co.jp');
         $this->assertEquals(array(
             array('email' => 'example@hotmail.co.jp'),
             array('email' => 'example@gmail.com'),
             array('email' => 'example@yahoo.co.jp'),
         ), $response);
 
-        $response = $this->$engin->makeAttendeesValue('example@hotmail.co.jp');
+        $response = $this->engin->makeAttendeesValue('example@hotmail.co.jp');
         $this->assertEquals(array(
             array('email' => 'example@hotmail.co.jp'),
         ), $response);
 
-        $response = $this->$engin->makeAttendeesValue('');
+        $response = $this->engin->makeAttendeesValue('');
         $this->assertEquals(array(array('email' => '')), $response);
 
-        $response = $this->$engin->makeAttendeesValue('example@hotmail.co.jp, あいう, example@yahoo.co.jp');
+        $response = $this->engin->makeAttendeesValue('example@hotmail.co.jp, あいう, example@yahoo.co.jp');
         $this->assertEquals(array(
             array('email' => 'example@hotmail.co.jp'),
             array('email' => 'あいう'),
@@ -76,14 +70,11 @@ class MakeAttendeesValueTest extends TestCase {
 class MakeDateValueTest extends TestCase {
     public function setUp() {
         require_once dirname(__FILE__)."/../Engine.php";
-        // ReflectionClassをテスト対象のクラスをもとに作る.
-        $reflection = new ReflectionClass("Acms\Plugins\GoogleCalendar\Engine");
-        $targetInstance = $reflection->newInstanceWithoutConstructor();
-        $this->$engin = new MethodTester($targetInstance);
+        $this->engin = new DummyClass("Acms\Plugins\GoogleCalendar\Engine");
     }
 
     public function testAddHour() {
-        $response = $this->$engin->makeDateValue([],array(
+        $response = $this->engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
             'endDateValue' => '',
@@ -103,7 +94,7 @@ class MakeDateValueTest extends TestCase {
     }
 
     public function testBlankDateTime() {
-        $response = $this->$engin->makeDateValue([],array(
+        $response = $this->engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
             'endDateValue' => '',
@@ -123,7 +114,7 @@ class MakeDateValueTest extends TestCase {
     }
     
     public function testFillDateTime() {
-        $response = $this->$engin->makeDateValue([],array(
+        $response = $this->engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
             'endDateValue' => '2020-07-02',
@@ -143,7 +134,7 @@ class MakeDateValueTest extends TestCase {
     }
 
     public function testFillDateAddTime() {
-        $response = $this->$engin->makeDateValue([],array(
+        $response = $this->engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
             'endDateValue' => '2020-07-02',
@@ -163,7 +154,7 @@ class MakeDateValueTest extends TestCase {
     }
 
     public function testAddDate() {
-        $response = $this->$engin->makeDateValue([],array(
+        $response = $this->engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
             'endDateValue' => '+1',
@@ -183,7 +174,7 @@ class MakeDateValueTest extends TestCase {
     }
 
     public function testAddDateAddTime() {
-        $response = $this->$engin->makeDateValue([],array(
+        $response = $this->engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
             'endDateValue' => '+1',
@@ -201,50 +192,22 @@ class MakeDateValueTest extends TestCase {
             ),
         ), $response);
     }
-}    
+}
 
 /**
- * https://www.agent-grow.com/self20percent/2018/05/09/phpunit_testing_private_and_protected_methods/
- * より引用
+ * 引数に指定したクラスのダミークラスを作成する
+ * コンストラクタなし
+ * プライベートメソッドアクセス可
  */
-class MethodTester
-{
-    /** @var object テスト処理を実行するクラスのインスタンス */
-    protected $___target_instance;
-
-    /** @var object ReflectionClassのオブジェクト */
-    protected $___reflect_obj;
-
-    /**
-     * MethodTester constructor.
-     *
-     * @param object $target_instance private, protectedメソッドを呼べるようにするインスタンス
-     * @throws \ReflectionException
-     */
-    public function __construct($target_instance)
-    {
-        $this->___target_instance = $target_instance;
-        $this->___reflect_obj     = new \ReflectionClass($target_instance);
+class DummyClass {
+    public function __construct($className) {
+        $this->reflection = new ReflectionClass($className);
+        $this->instance = $this->reflection->newInstanceWithoutConstructor();
     }
 
-    public function __get($name)
-    {
-        $property = $this->___reflect_obj->getProperty($name);
-        $property->setAccessible(true);
-        return $property->getValue($this->___target_instance);
-    }
-
-    public function __set($name, $value)
-    {
-        $property = $this->___reflect_obj->getProperty($name);
-        $property->setAccessible(true);
-        $property->setValue($this->___target_instance, $value);
-    }
-
-    public function __call($name, $arguments)
-    {
-        $method = $this->___reflect_obj->getMethod($name);
+    public function __call($name, $arguments) {
+        $method = $this->reflection->getMethod($name);
         $method->setAccessible(true);
-        return $method->invokeArgs($this->___target_instance, $arguments);
+        return $method->invokeArgs($this->instance, $arguments);
     }
 }
