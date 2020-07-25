@@ -195,13 +195,12 @@ class MakeDateValueTest extends TestCase {
 }
 
 /**
- * 引数に指定したクラスのダミークラスを作成する
- * コンストラクタなし
- * プライベートメソッドアクセス可
+ * 引数に指定したクラス名のダミークラスを作成する
  */
 class DummyClass {
     public function __construct($className) {
         $this->reflection = new ReflectionClass($className);
+        // コンストラクタなしで ReflectionClass をインスタンス化
         $this->instance = $this->reflection->newInstanceWithoutConstructor();
     }
 
