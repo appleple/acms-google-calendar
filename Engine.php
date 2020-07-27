@@ -47,7 +47,6 @@ class Engine
         // GoogleCalendarAPIに渡す情報を生成
         $values = $this->makeCalendarValues($field);
 
-        echo print_r($values);
         $this->update($values);
     }
 
@@ -224,9 +223,6 @@ class Engine
             "dateTime" => $endDate."T".$endTime,
             "timeZone" => $dateMixArray["timeZoneValue"],
         ));
-
-        echo $startDate."T".$startTime;
-        echo $endDate."T".$endTime;
         return $value;
     }
 
