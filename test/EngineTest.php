@@ -91,6 +91,24 @@ class MakeDateValueTest extends TestCase {
                 "timeZone" => "Asia/Tokyo",
             ),
         ), $response);
+
+        $response = $this->engin->makeDateValue([],array(
+            'startDateValue' => '2020-07-01',
+            'startTimeValue' => '12:00:00',
+            'endDateValue' => '',
+            'endTimeValue' => '+02:20:20',
+            'timeZoneValue' => 'Asia/Tokyo',
+        ));
+        $this->assertEquals(array(
+            "start" => array(
+                "dateTime" => "2020-07-01T12:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+            "end" => array(
+                "dateTime" => "2020-07-01T14:20:20",
+                "timeZone" => "Asia/Tokyo",
+            ),
+        ), $response);
     }
 
     public function testBlankDateTime() {
