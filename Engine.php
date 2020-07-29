@@ -186,41 +186,64 @@ class Engine
      * @return array
      */
     private function makeDateValue($value, $dateMixArray) {
-        $startDate = $dateMixArray["startDateValue"];
-        $startTime = $dateMixArray["startTimeValue"];
-
-        if ($dateMixArray["endDateValue"]=="") {
-            $endDate = $startDate;
-        } else if (substr($dateMixArray["endDateValue"], 0, 1)=="+") {
-            $endDate = str_replace(array("+"), "", $dateMixArray["endDateValue"]);
-            $addedDate = $this->addDateTime($startDate." ".$startTime, $endDate." 0:0:0");
-            $addedDates = explode(" ", $addedDate);
-            $endDate = $addedDates[0];
+        if ($dateMixArray["startTimeValue"]=="" && $dateMixArray["endTimeValue"]=="") {
+            $startDate = $dateMixArray["startDateValue"];
+            if ($dateMixArray["endDateValue"]=="") {
+                $endDate = $startDate;
+            } else if (substr($dateMixArray["endDateValue"], 0, 1)=="+") {
+                $endDate = str_replace(array("+"), "", $dateMixArray["endDateValue"]);
+                $addedDate = $this->addDateTime($startDate." 0:0:0", $endDate." 0:0:0");
+                $addedDates = explode(" ", $addedDate);
+                $endDate = $addedDates[0];
+            } else {
+                $endDate = $dateMixArray["endDateValue"];
+            }
+            $value += array("start" => array(
+                "date" => $startDate,
+                "timeZone" => $dateMixArray["timeZoneValue"],
+            ));
+    
+            $value += array("end" => array(
+                "date" => $endDate,
+                "timeZone" => $dateMixArray["timeZoneValue"],
+            ));
         } else {
-            $endDate = $dateMixArray["endDateValue"];
+            $startDate = $dateMixArray["startDateValue"];
+            $startTime = $dateMixArray["startTimeValue"];
+    
+            if ($dateMixArray["endDateValue"]=="") {
+                $endDate = $startDate;
+            } else if (substr($dateMixArray["endDateValue"], 0, 1)=="+") {
+                $endDate = str_replace(array("+"), "", $dateMixArray["endDateValue"]);
+                $addedDate = $this->addDateTime($startDate." ".$startTime, $endDate." 0:0:0");
+                $addedDates = explode(" ", $addedDate);
+                $endDate = $addedDates[0];
+            } else {
+                $endDate = $dateMixArray["endDateValue"];
+            }
+    
+            if ($dateMixArray["endTimeValue"]=="") {
+                $endTime = $startTime;
+            } else if (substr($dateMixArray["endTimeValue"], 0, 1)=="+") {
+                $endTime = str_replace(array("+"), "", $dateMixArray["endTimeValue"]);
+                $addedDate = $this->addDateTime($endDate." ".$startTime, "0-0-0 ".$endTime);
+                $addedDates = explode(" ", $addedDate);
+                $endDate = $addedDates[0];
+                $endTime = $addedDates[1];
+            } else {
+                $endTime = $dateMixArray["endTimeValue"];
+            }
+    
+            $value += array("start" => array(
+                "dateTime" => $startDate."T".$startTime,
+                "timeZone" => $dateMixArray["timeZoneValue"],
+            ));
+    
+            $value += array("end" => array(
+                "dateTime" => $endDate."T".$endTime,
+                "timeZone" => $dateMixArray["timeZoneValue"],
+            ));
         }
-
-        if ($dateMixArray["endTimeValue"]=="") {
-            $endTime = $startTime;
-        } else if (substr($dateMixArray["endTimeValue"], 0, 1)=="+") {
-            $endTime = str_replace(array("+"), "", $dateMixArray["endTimeValue"]);
-            $addedDate = $this->addDateTime($endDate." ".$startTime, "0-0-0 ".$endTime);
-            $addedDates = explode(" ", $addedDate);
-            $endDate = $addedDates[0];
-            $endTime = $addedDates[1];
-        } else {
-            $endTime = $dateMixArray["endTimeValue"];
-        }
-
-        $value += array("start" => array(
-            "dateTime" => $startDate."T".$startTime,
-            "timeZone" => $dateMixArray["timeZoneValue"],
-        ));
-
-        $value += array("end" => array(
-            "dateTime" => $endDate."T".$endTime,
-            "timeZone" => $dateMixArray["timeZoneValue"],
-        ));
         return $value;
     }
 
