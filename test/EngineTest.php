@@ -2,13 +2,14 @@
 
 use PHPUnit\Framework\TestCase;
 
+require_once dirname(__FILE__)."/../Engine.php";
+
 class AddDateTimeTest extends TestCase {
 
     /**
      * create Engin instance without constructor
      */
     public function setUp() {
-        require_once dirname(__FILE__)."/../Engine.php";
         $this->engin = new DummyClass("Acms\Plugins\GoogleCalendar\Engine");
     }
 
@@ -38,38 +39,48 @@ class AddDateTimeTest extends TestCase {
 
 class MakeAttendeesValueTest extends TestCase {
     public function setUp() {
-        require_once dirname(__FILE__)."/../Engine.php";
         $this->engin = new DummyClass("Acms\Plugins\GoogleCalendar\Engine");
     }
 
-    public function testMakeAttendeesValue() {
-        $response = $this->engin->makeAttendeesValue('example@hotmail.co.jp, example@gmail.com, example@yahoo.co.jp');
+    /**
+     * Common::getMailTxtFromTxt($formItems["calendar_event_attendees"], $field)
+     * によってemailが埋め込まれた文字列が渡される
+     */
+    public function testThreeAttendees() {
+        $response = $this->engin->makeAttendeesValue([], 'example@hotmail.co.jp, example@gmail.com, example@yahoo.co.jp');
         $this->assertEquals(array(
-            array('email' => 'example@hotmail.co.jp'),
-            array('email' => 'example@gmail.com'),
-            array('email' => 'example@yahoo.co.jp'),
-        ), $response);
+            'attendees' => array(
+                array('email' => 'example@hotmail.co.jp'),
+                array('email' => 'example@gmail.com'),
+                array('email' => 'example@yahoo.co.jp'),
+            )), $response);
+    }
 
-        $response = $this->engin->makeAttendeesValue('example@hotmail.co.jp');
+    public function testAnAttendees() {
+        $response = $this->engin->makeAttendeesValue([], 'example@hotmail.co.jp');
         $this->assertEquals(array(
-            array('email' => 'example@hotmail.co.jp'),
-        ), $response);
+            'attendees' => array(
+                array('email' => 'example@hotmail.co.jp'),
+            )), $response);
+    }
 
-        $response = $this->engin->makeAttendeesValue('');
-        $this->assertEquals(array(array('email' => '')), $response);
+    public function testNoAttendees() {
+        $response = $this->engin->makeAttendeesValue([], '');
+        $this->assertEquals(array(), $response);
+    }
 
-        $response = $this->engin->makeAttendeesValue('example@hotmail.co.jp, あいう, example@yahoo.co.jp');
+    public function testStrHasInvalidEmail() {
+        $response = $this->engin->makeAttendeesValue([], 'example@hotmail.co.jp, あいう, example@yahoo.co.jp');
         $this->assertEquals(array(
-            array('email' => 'example@hotmail.co.jp'),
-            array('email' => 'あいう'),
-            array('email' => 'example@yahoo.co.jp'),
-        ), $response);
+            'attendees' => array(
+                array('email' => 'example@hotmail.co.jp'),
+                array('email' => 'example@yahoo.co.jp'),
+            )), $response);
     }
 }
 
 class MakeDateValueTest extends TestCase {
     public function setUp() {
-        require_once dirname(__FILE__)."/../Engine.php";
         $this->engin = new DummyClass("Acms\Plugins\GoogleCalendar\Engine");
     }
 
@@ -125,7 +136,7 @@ class MakeDateValueTest extends TestCase {
                 "timeZone" => "Asia/Tokyo",
             ),
             "end" => array(
-                "dateTime" => "2020-07-01T13:00:00",
+                "dateTime" => "2020-07-01T12:00:00",
                 "timeZone" => "Asia/Tokyo",
             ),
         ), $response);
@@ -175,7 +186,43 @@ class MakeDateValueTest extends TestCase {
         $response = $this->engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
-            'endDateValue' => '+1',
+            'endDateValue' => '+00-00-01',
+            'endTimeValue' => '',
+            'timeZoneValue' => 'Asia/Tokyo',
+        ));
+        $this->assertEquals(array(
+            "start" => array(
+                "dateTime" => "2020-07-01T12:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+            "end" => array(
+                "dateTime" => "2020-07-02T12:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+        ), $response);
+
+        $response = $this->engin->makeDateValue([],array(
+            'startDateValue' => '2020-07-01',
+            'startTimeValue' => '12:00:00',
+            'endDateValue' => '+01-00-01',
+            'endTimeValue' => '',
+            'timeZoneValue' => 'Asia/Tokyo',
+        ));
+        $this->assertEquals(array(
+            "start" => array(
+                "dateTime" => "2020-07-01T12:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+            "end" => array(
+                "dateTime" => "2021-07-02T12:00:00",
+                "timeZone" => "Asia/Tokyo",
+            ),
+        ), $response);
+        
+        $response = $this->engin->makeDateValue([],array(
+            'startDateValue' => '2020-07-01',
+            'startTimeValue' => '12:00:00',
+            'endDateValue' => '+0-0-1',
             'endTimeValue' => '',
             'timeZoneValue' => 'Asia/Tokyo',
         ));
@@ -195,7 +242,7 @@ class MakeDateValueTest extends TestCase {
         $response = $this->engin->makeDateValue([],array(
             'startDateValue' => '2020-07-01',
             'startTimeValue' => '12:00:00',
-            'endDateValue' => '+1',
+            'endDateValue' => '+00-00-01',
             'endTimeValue' => '+01:00:00',
             'timeZoneValue' => 'Asia/Tokyo',
         ));

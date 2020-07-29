@@ -138,15 +138,11 @@ class Engine
             // 予定説明
             'description' => Common::getMailTxtFromTxt($formItems["calendar_event_description"], $field),
 
-            // 参加者
-            'attendees' => $this->makeAttendeesValue(Common::getMailTxtFromTxt($formItems["calendar_event_attendees"], $field)),
-
             // リマインダー
-            // 現在off
             // 通知設定機能の実装を検討中
-            'reminders' => array(
-                'useDefault' => FALSE,
-            ),
+            //'reminders' => array(
+            //    'useDefault' => FALSE,
+            //),
         );
         $values = $this->makeDateValue($values, array(
             'startDateValue' => $checkItems["calendar_start_date"] ? $field->get($formItems["calendar_start_date"]): $formItems["calendar_start_date"],
@@ -155,6 +151,7 @@ class Engine
             'endTimeValue' => $checkItems["calendar_end_time"] ? $field->get($formItems["calendar_end_time"]): $formItems["calendar_end_time"],
             'timeZoneValue' => $formItems["calendar_event_timeZone"],
         ));
+        $values = $this->makeAttendeesValue($values, Common::getMailTxtFromTxt($formItems["calendar_event_attendees"], $field));
         return $values;
     }
 
@@ -166,17 +163,27 @@ class Engine
         array('email' => 'example@yahoo.co.jp'),
     )*/
     // @return string[]
-    private function makeAttendeesValue($str) {
+    private function makeAttendeesValue($value, $str) {
         
         // 空白文字(全角・半角)を削除
         $str = str_replace(array(" ", "　"), "", $str);
 
         $attendees = explode(',', $str);
-        $array = array();
+        $attendeesArray = array();
+
+        // emailを表す正規表現
+        $reg_str = "/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/";
+        
         foreach ($attendees as $attendee) {
-            array_push($array,array('email' => $attendee));
+            if (preg_match($reg_str, $attendee)) {
+                array_push($attendeesArray,array('email' => $attendee));
+            }
         }
-        return $array;
+
+        if ($attendeesArray != []){
+            $value += array("attendees" => $attendeesArray);
+        }
+        return $value;
     }
 
     private function makeDateValue($value, $dateMixArray) {
@@ -184,31 +191,25 @@ class Engine
         $startTime = $dateMixArray["startTimeValue"];
 
         // ここから終了日時を計算する
-        if ($dateMixArray["endDateValue"]=="" || substr($dateMixArray["endDateValue"], 0, 1)=="+") {
-            if ($dateMixArray["endDateValue"]=="") {
-                $endDate = $startDate;
-            } else {
-                $endDate = str_replace(array("+"), "", $dateMixArray["endDateValue"]);
-                $addedDate = $this->addDateTime($startDate." ".$startTime, $endDate." 0:0:0");
-                $endDate = explode(':', $addedDate)[0];
-            }
+        if ($dateMixArray["endDateValue"]=="") {
+            $endDate = $startDate;
+        } else if (substr($dateMixArray["endDateValue"], 0, 1)=="+") {
+            $endDate = str_replace(array("+"), "", $dateMixArray["endDateValue"]);
+            $addedDate = $this->addDateTime($startDate." ".$startTime, $endDate." 0:0:0");
+            $addedDates = explode(" ", $addedDate);
+            $endDate = $addedDates[0];
         } else {
             $endDate = $dateMixArray["endDateValue"];
         }
 
-        if ($dateMixArray["endTimeValue"]=="" || substr($dateMixArray["endTimeValue"], 0, 1)=="+") {
-            if (substr($dateMixArray["endTimeValue"], 0, 1)=="+") {
-                $endTime = str_replace(array("+"), "", $dateMixArray["endTimeValue"]);
-                $addedDate = $this->addDateTime($startDate." ".$startTime, "0-0-0 ".$endTime);
-                $addedDates = explode(" ", $addedDate);
-                $endDate = $addedDates[0];
-                $endTime = $addedDates[1];
-            } else {
-                $addedDate = $this->addDateTime($startDate." ".$startTime, "0-0-0 1:0:0");
-                $addedDates = explode(" ", $addedDate);
-                $endDate = $addedDates[0];
-                $endTime = $addedDates[1];
-            }
+        if ($dateMixArray["endTimeValue"]=="") {
+            $endTime = $startTime;
+        } else if (substr($dateMixArray["endTimeValue"], 0, 1)=="+") {
+            $endTime = str_replace(array("+"), "", $dateMixArray["endTimeValue"]);
+            $addedDate = $this->addDateTime($endDate." ".$startTime, "0-0-0 ".$endTime);
+            $addedDates = explode(" ", $addedDate);
+            $endDate = $addedDates[0];
+            $endTime = $addedDates[1];
         } else {
             $endTime = $dateMixArray["endTimeValue"];
         }
