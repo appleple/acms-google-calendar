@@ -44,7 +44,6 @@ class Engine
     {
         $field = $this->module->Post->getChild('field');
 
-        // GoogleCalendarAPIに渡す情報を生成
         $values = $this->makeCalendarValues($field);
 
         $this->update($values);
@@ -64,15 +63,14 @@ class Engine
         $service = new Google_Service_Calendar($client);
         $calendarId = $this->config->get('calendar_id');
 
-        $event = new Google_Service_Calendar_Event($values);
-
-        $response = $service->events->insert($calendarId, $event);
-
-        if (!$response->valid()) {
-            throw new \RuntimeException('Failed to update the calendar.');
-        }
+        if ($calendarId!="") {
+            $event = new Google_Service_Calendar_Event($values);
+            $response = $service->events->insert($calendarId, $event);
+            if (!$response->valid()) {
+                throw new \RuntimeException('Failed to update the calendar.');
+            }
+        }  
     }
-
 
     /**
      * @param string $code
@@ -98,12 +96,11 @@ class Engine
         return $Form;
     }
 
+    /**
+     * @param Field
+     * @return array
+     */
     protected function makeCalendarValues($field){
-        
-        // 設定項目について、チェックボックスの真偽値の配列
-        // ablog cms カスタムフィールドを使用：true
-        // ablog cms カスタムフィールドを使用しない：false
-        // $checkItems:bool[]
         $checkItems = array(
             'calendar_start_date' => $this->config->get('calendar_start_date_check'),
             'calendar_start_time' => $this->config->get('calendar_start_time_check'),
@@ -112,8 +109,6 @@ class Engine
             'calendar_event_timeZone' => $this->config->get('calendar_event_timeZone_check'),
         );
 
-        // 各設定項目について、記述されている値の配列
-        // $formField:string[]
         $formItems = array(
             'calendar_event_title' => $this->config->get('calendar_event_title'),
             'calendar_event_location' => $this->config->get('calendar_event_location'),
@@ -126,24 +121,23 @@ class Engine
             'calendar_event_timeZone' => $this->config->get('calendar_event_timeZone'),
         );
 
-        // GoogleCalendarAPIに渡される値
-        // $values:string[]
         $values = array(
-            // 予定タイトル
+            // event title
             'summary' => Common::getMailTxtFromTxt($formItems["calendar_event_title"], $field),
 
-            // 予定場所
+            // event location
             'location' => Common::getMailTxtFromTxt($formItems["calendar_event_location"], $field),
 
-            // 予定説明
+            // event description
             'description' => Common::getMailTxtFromTxt($formItems["calendar_event_description"], $field),
 
-            // リマインダー
-            // 通知設定機能の実装を検討中
+            // reminders
             //'reminders' => array(
             //    'useDefault' => FALSE,
             //),
         );
+
+        // event date_time
         $values = $this->makeDateValue($values, array(
             'startDateValue' => $checkItems["calendar_start_date"] ? $field->get($formItems["calendar_start_date"]): $formItems["calendar_start_date"],
             'startTimeValue' => $checkItems["calendar_start_time"] ? $field->get($formItems["calendar_start_time"]): $formItems["calendar_start_time"],
@@ -151,27 +145,26 @@ class Engine
             'endTimeValue' => $checkItems["calendar_end_time"] ? $field->get($formItems["calendar_end_time"]): $formItems["calendar_end_time"],
             'timeZoneValue' => $formItems["calendar_event_timeZone"],
         ));
+
+        // event attendees
         $values = $this->makeAttendeesValue($values, Common::getMailTxtFromTxt($formItems["calendar_event_attendees"], $field));
         return $values;
     }
 
-    // GoogleCalendarに送信する attendees の array を作成する
-    // example: 'example@hotmail.co.jp, example@gmail.com, example@yahoo.co.jp'
-    /*  becomes: array(
-        array('email' => 'example@hotmail.co.jp),
-        array('email' => 'example@gmail.com'),
-        array('email' => 'example@yahoo.co.jp'),
-    )*/
-    // @return string[]
-    private function makeAttendeesValue($value, $str) {
-        
-        // 空白文字(全角・半角)を削除
-        $str = str_replace(array(" ", "　"), "", $str);
+    /**
+     * @param array $value
+     * @param string $attendeesStr
+     * 
+     * @return array
+     */
+    private function makeAttendeesValue($value, $attendeesStr) {
+        // delete space character
+        $attendeesStr = str_replace(array(" ", "　"), "", $attendeesStr);
 
-        $attendees = explode(',', $str);
+        $attendees = explode(',', $attendeesStr);
         $attendeesArray = array();
 
-        // emailを表す正規表現
+        // regular expression of email
         $reg_str = "/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/";
         
         foreach ($attendees as $attendee) {
@@ -186,11 +179,16 @@ class Engine
         return $value;
     }
 
+    /**
+     * @param array $value
+     * @param array $dateMixArray
+     * 
+     * @return array
+     */
     private function makeDateValue($value, $dateMixArray) {
         $startDate = $dateMixArray["startDateValue"];
         $startTime = $dateMixArray["startTimeValue"];
 
-        // ここから終了日時を計算する
         if ($dateMixArray["endDateValue"]=="") {
             $endDate = $startDate;
         } else if (substr($dateMixArray["endDateValue"], 0, 1)=="+") {
@@ -214,7 +212,6 @@ class Engine
             $endTime = $dateMixArray["endTimeValue"];
         }
 
-        // $value に日付情報を格納
         $value += array("start" => array(
             "dateTime" => $startDate."T".$startTime,
             "timeZone" => $dateMixArray["timeZoneValue"],
@@ -227,7 +224,10 @@ class Engine
         return $value;
     }
 
-    // y-m-d h:i:s 形式
+    /**
+     * @param string $date
+     * @param string $dateTime
+     */
     private function addDateTime($date, $dateTime) {
         $dateSplit = str_replace([" ", ":"], "-", $date);
         $dateSplit = explode("-", $dateSplit);
