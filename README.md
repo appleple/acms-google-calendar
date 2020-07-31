@@ -18,7 +18,7 @@
 [Google API Console](https://console.developers.google.com/)にアクセスし，a-blog cms と連携するプロジェクトの認証情報を作成します．
 プロジェクトの管理画面で OAuthクライアントID を選択し，OAuthクライアントIDを作成します．
 <div align="center">
-<img src="./images/select_key_type.png" width="80%"/>
+<img src="./images/select_key_type.png" width="80%" style="margin-bottom:30px;"/>
 </div>
 
 OAuth クライアントID 作成時に設定しなければならない項目は，アプリケーションの種類，名前，承認済みのリダイレクトURLです．
