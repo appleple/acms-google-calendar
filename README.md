@@ -5,8 +5,8 @@
 [Google Calendar for a-blog cms](https://github.com/appleple/acms-google-calendar/raw/master/build/GoogleCalendar.zip)
 
 ## 動作環境
-a-blog cms: >=Ver.2.8.0
-php: >=5.4
+- a-blog cms: >=Ver.2.8.0
+- php: >=5.4
 
 ## 準備
 次のステップで a-blog cms と [Google Calendar](https://www.google.com/calnedar/about/) を連携します．
