@@ -1,10 +1,11 @@
 # acms-google-calendar
-「Google Calendar」は a-blog cms Ver.2.8.0 より利用可能な a-blog cms の拡張アプリです． このアプリは「[Google Calendar](https://www.google.com/calendar/about/)」と連携し，お問い合わせフォームなどで送信された内容を任意のGoogle Calendarに登録します．
+「[Google Calendar](https://www.google.com/calendar/about/)」と連携し，お問い合わせフォームなどで送信された内容を任意の Google Calendar に登録する拡張アプリです．
 
 ## ダウンロード
 [Google Calendar for a-blog cms](https://github.com/appleple/acms-google-calendar/raw/master/build/GoogleCalendar.zip)
 
 ## 動作環境
+a-blog cms: >=Ver.2.8.0
 php: >=5.4
 
 ## 準備
