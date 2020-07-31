@@ -18,13 +18,13 @@
 [Google API Console](https://console.developers.google.com/)にアクセスし，a-blog cms と連携するプロジェクトの認証情報を作成します．
 プロジェクトの管理画面で OAuthクライアントID を選択し，OAuthクライアントIDを作成します．
 <div align="center">
-<img src="./images/select_key_type.png" width="80%"/>
+<img src="./images/select_key_type.png" width="70%"/>
 </div>
 
 OAuth クライアントID 作成時に設定しなければならない項目は，アプリケーションの種類，名前，承認済みのリダイレクトURLです．
 ここでは，下の画像のようにアプリケーションの種類を「ウェブアプリケーション」，承認済みのリダイレクトURLは「ドメイン名/bid/（現在使用しているブログのBID）/admin/app_google_calendar_callback/」と設定します．名前は任意のもので構いません．
 <div align="center">
-<img src="./images/setting_oauth_json.png" width="80%"/>
+<img src="./images/setting_oauth_json.png" width="70%"/>
 </div>
 
 作成が完了したら，画像の赤丸で囲まれた場所をクリックします．ここで，JSONファイルがダウンロードされますので，このファイルを a-blog cms が動いているサーバにアップロードします(ブラウザからアクセスできないドキュメントルートより上の階層にアップロードすることが望ましいです)．
@@ -38,7 +38,7 @@ define('HOOK_ENABLE', 1);
 extension/plugins に[Google Calendar for a-blog cms](https://github.com/appleple/acms-google-calendar/raw/master/build/GoogleCalendar.zip)をアップロードし，管理画面 > 拡張アプリより， Google Calendar をインストールします．インストール完了後，管理画面 > Google Calnedar より Google Calendar の管理画面に移動します(下の図)．ここで，Client ID Key Location に先ほどアップロードしたJSONファイルが存在する場所を表す絶対パスを入力し，「認証」をクリックします．認証に成功すると，認証ボタンの表示が「認証済み」に変化します．
 
 <div align="center">
-<img src="./images/acms_setting_oauth.png" width="80%"/>
+<img src="./images/acms_setting_oauth.png" width="70%"/>
 </div>
 
 ## 設定
@@ -46,7 +46,7 @@ extension/plugins に[Google Calendar for a-blog cms](https://github.com/applepl
 次に，Google Calendar と連携するフォームの設定を行います．管理画面 > フォーム より，連携したいフォームの設定画面に移動します．「Google Calendar 設定」，「Google Calendar Form 設定」という項目があるので，ここにフォームが送信された時にカレンダーに登録したい値を設定します．例えば入力する値は次のように設定します．
 
 <div align="center">
-<img src="./images/setting_example1.png" width="80%"/>
+<img src="./images/setting_example1.png" width="70%"/>
 </div>
 
 この設定では，フォームが送信された際に，設定した Calendar ID (example_calendar_id) のカレンダーに，イベント名「サンプルイベント」，場所「愛知県名古屋市」，説明「みんなが楽しめるイベントです。」，開始日時「2020/7/1 12:00」，終了日時「2020/7/1 14:00」，タイムゾーン「Asia/Tokyo」であるイベントが追加されます．
@@ -55,7 +55,7 @@ extension/plugins に[Google Calendar for a-blog cms](https://github.com/applepl
 カレンダーに登録される値をフォームの内容に応じた値にすることができます．例えば，次のように設定します．
 
 <div align="center">
-<img src="./images/setting_example2.png" width="80%"/>
+<img src="./images/setting_example2.png" width="70%"/>
 </div>
 
 この例では，イベント名「{description} について」，開始日付「{postal-code}{address1}{address2}」，説明「このイベントの内容は {inquiry} です。」のイベントが追加されます．ここで，{}で囲まれた部分には{}内の名前に対応するカスタムフィールド名のフォーム送信時の値が挿入されます．また，時間設定にもカスタムフィールドの値を用いることができます．その際は，右の「カスタムフィールドの値を使用する」チェックボックスにチェックしてください．
