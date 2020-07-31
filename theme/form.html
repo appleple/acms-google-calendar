@@ -1,0 +1,112 @@
+<h2 class="acms-admin-admin-title2">GoogleCalendar設定</h2>
+<table class="acms-admin-table-admin-edit">
+	<tr>
+		<th>Calendar ID<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="連携する Google Calendar の Calendar ID を入力します。"></i></th>
+		<td>
+			<input type="text" name="calendar_id" value="{calendar_id}" class="acms-admin-form-width-full" placeholder="例）example@group.calendar.google.com">
+			<input type="hidden" name="mail[]" value="calendar_id">
+		</td>
+	</tr>
+	<tr>
+	  <th>イベントタイトル<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="カレンダーに挿入するイベントのタイトルを記述します。\{変数名\}を用いて、フォーム送信時に対応する値を挿入できます。"></i></th>
+	  <td>
+		<input type="text" name="calendar_event_title" value="{calendar_event_title}" class="acms-admin-form-width-full" placeholder="例）サンプルイベント"/>
+		<input type="hidden" name="mail[]" value="calendar_event_title" />
+	  </td>
+	</tr>
+	<tr>
+		<th>場所<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="カレンダーに挿入するイベントの開催場所を記述します。\{変数名\}を用いて、フォーム送信時に対応する値を挿入できます。"></i></th>
+		<td>
+		  <input type="text" name="calendar_event_location" value="{calendar_event_location}" class="acms-admin-form-width-full" placeholder="例）名古屋市中村区名駅3-18-5 モンマートビル5F"/>
+		  <input type="hidden" name="mail[]" value="calendar_event_location" />
+		</td>
+	</tr>
+	<tr>
+		<th>説明<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="カレンダーに挿入するイベントの説明を記述します。\{変数名\}を用いて、フォーム送信時に対応する値を挿入できます。"></i></th>
+		<td>
+			<textarea name="calendar_event_description" class="acms-admin-form-width-full" rows="10" placeholder="例）イベント概要">{calendar_event_description}</textarea>
+		  <input type="hidden" name="mail[]" value="calendar_event_description" />
+		</td>
+	</tr>
+	<tr>
+		<th>参加者<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="カレンダーに挿入するイベントの参加者のEmailアドレスを記述します。\{変数名\}を用いて、フォーム送信時に対応する値を挿入できます。「,(半角カンマ)」で区切り、複数指定することが可能です。"></i></th>
+		<td>
+		  <input type="text" name="calendar_event_attendees" value="{calendar_event_attendees}" class="acms-admin-form-width-full" placeholder="例）example@appleple.com"/>
+		  <input type="hidden" name="mail[]" value="calendar_event_attendees" />
+		</td>
+	</tr>
+	<tr>
+		<th>開始日付<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="この項目は必須です。カレンダーに挿入するイベントの開始日付を yy-MM-dd の形式で記述します。カスタムフィールドの値を指定することもできます。その際は、「カスタムフィールドの値を使用する」にチェックを入れ、カスタムフィールド名のみを記述してください(上記項目のような\{\}は不要です)。"></i></th>
+		<td>
+			<div class="acms-admin-action-wrap">
+				<input type="text" name="calendar_start_date" value="{calendar_start_date}" size="40" placeholder="例）2020-07-01"/>
+				<input type="hidden" name="mail[]" value="calendar_start_date" />
+				<div class="acms-admin-form-checkbox acms-admin-action-spacer">
+					<input type="checkbox" name="calendar_start_date_check[]" value="true" id="calendar_start_date_check-true"{calendar_start_date_check:checked#true} />
+					<label for="calendar_start_date_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールドの値を使用する</label>
+					<input type="hidden" name="mail[]" value="calendar_start_date_check" />
+				</div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<th>開始時間<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="カレンダーに挿入するイベントの開始時間を HH:mm:ss の形式で記述します。カスタムフィールドの値を指定することもできます。その際は、「カスタムフィールドの値を使用する」にチェックを入れ、カスタムフィールド名のみを記述してください(上記項目のような\{\}は不要です)。"></i></th>
+		<td>
+			<div class="acms-admin-action-wrap">
+				<input type="text" name="calendar_start_time" value="{calendar_start_time}" size="40" placeholder="例）12:00:00"/>
+				<input type="hidden" name="mail[]" value="calendar_start_time" />
+				<div class="acms-admin-form-checkbox acms-admin-action-spacer">
+					<input type="checkbox" name="calendar_start_time_check[]" value="true" id="calendar_start_time_check-true"{calendar_start_time_check:checked#true} />
+					<label for="calendar_start_time_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールドの値を使用する</label>
+					<input type="hidden" name="mail[]" value="calendar_start_time_check" />
+				</div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<th>終了日付<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="カレンダーに挿入するイベントの終了日付を yy-MM-dd の形式で記述します。カスタムフィールドの値を指定することもできます。その際は、「カスタムフィールドの値を使用する」にチェックを入れ、カスタムフィールド名のみを記述してください(上記項目のような\{\}は不要です)。"></i></th>
+		<td>
+			<div class="acms-admin-action-wrap">
+				<input type="text" name="calendar_end_date" value="{calendar_end_date}" size="40" placeholder="例）2020-07-01"/>
+				<input type="hidden" name="mail[]" value="calendar_end_date" />
+				<div class="acms-admin-form-checkbox acms-admin-action-spacer">
+					<input type="checkbox" name="calendar_end_date_check[]" value="true" id="calendar_end_date_check-true"{calendar_end_date_check:checked#true} />
+					<label for="calendar_end_date_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールドの値を使用する</label>
+					<input type="hidden" name="mail[]" value="calendar_end_date_check" />
+				</div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<th>終了時刻<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="カレンダーに挿入するイベントの終了時間を HH:mm:ss の形式で記述します。カスタムフィールドの値を指定することもできます。その際は、「カスタムフィールドの値を使用する」にチェックを入れ、カスタムフィールド名のみを記述してください(上記項目のような\{\}は不要です)。"></i></th>
+		<td>
+			<div class="acms-admin-action-wrap">
+				<input type="text" name="calendar_end_time" value="{calendar_end_time}" size="40" placeholder="例）14:00:00"/>
+				<input type="hidden" name="mail[]" value="calendar_end_time" />
+				<div class="acms-admin-form-checkbox acms-admin-action-spacer">
+					<input type="checkbox" name="calendar_end_time_check[]" value="true" id="calendar_end_time_check-true"{calendar_end_time_check:checked#true} />
+					<label for="calendar_end_time_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールドの値を使用する</label>
+					<input type="hidden" name="mail[]" value="calendar_end_time_check" />
+				</div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<th>タイムゾーン<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="この項目は必須です。イベントのタイムゾーンを IANA Time Zone Database name を用いて指定します。"></i></th>
+		<td>
+			<div class="acms-admin-action-wrap">
+				<!-- BEGIN_IF [{calendar_event_timeZone}/nem] -->
+				<input type="text" name="calendar_event_timeZone" value="{calendar_event_timeZone}" size="40" placeholder="例）Asia/Tokyo"/>
+				<!-- ELSE -->
+				<input type="text" name="calendar_event_timeZone" value="Asia/Tokyo" size="40" placeholder="例）Asia/Tokyo">
+				<!-- END_IF -->
+				<input type="hidden" name="mail[]" value="calendar_event_timeZone" />
+				<div class="acms-admin-form-checkbox acms-admin-action-spacer">
+					<input type="checkbox" name="calendar_event_timeZone_check[]" value="true" id="calendar_event_timeZone_check-true"{calendar_event_timeZone_check:checked#true} />
+					<label for="calendar_event_timeZone_check-true"><i class="acms-admin-ico-checkbox"></i>カスタムフィールドの値を使用する</label>
+					<input type="hidden" name="mail[]" value="calendar_event_timeZone_check" />
+				</div>
+			</div>
+		</td>
+	</tr>
+</table>
