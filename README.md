@@ -11,17 +11,30 @@
 ## 準備
 次のステップで a-blog cms と [Google Calendar](https://www.google.com/calnedar/about/) を連携します．
 
-1. ClientID JSON の取得
-2. ClientID JSON を CMS側に登録
+1. Google Calendar と連携するプロジェクトを設定
+2. ClientID JSON の取得
+3. ClientID JSON を CMS側に登録
 
-### 1. ClientID JSON の取得
-[Google API Console](https://console.developers.google.com/)にアクセスし，a-blog cms と連携するプロジェクトの認証情報を作成します．
+### 1. Google Calendar と連携するプロジェクトを設定
+[Google API Console](https://console.developers.google.com/)にアクセスし，a-blog cms と連携するプロジェクトを設定します．<br>
+Google API Console で新しいプロジェクト、または既存のプロジェクトを選択します．
+<div align="center">
+<img src="./images/create_new_project.png" width="80%"/>
+</div>
+
+新規でプロジェクトを作成した場合、または、Google Calendar API を有効化していないプロジェクトの場合は、プロジェクトの管理画面で ライブラリ->APIライブラリ に遷移し、Google Calendar API を有効化します．
+<div align="center">
+<img src="./images/activate_google_calendar.png" width="80%"/>
+</div>
+
+### 2. ClientID JSON の取得
+続いて、a-blog cms と連携するプロジェクトの認証情報を作成します．<br>
 プロジェクトの管理画面で OAuthクライアントID を選択し，OAuthクライアントIDを作成します．
 <div align="center">
 <img src="./images/select_key_type.png" width="80%"/>
 </div>
 
-OAuth クライアントID 作成時に設定しなければならない項目は，アプリケーションの種類，名前，承認済みのリダイレクトURLです．
+OAuth クライアントID 作成時に設定しなければならない項目は，アプリケーションの種類，名前，承認済みのリダイレクトURLです．<br>
 ここでは，下の画像のようにアプリケーションの種類を「ウェブアプリケーション」，承認済みのリダイレクトURLは「ドメイン名/bid/（現在使用しているブログのBID）/admin/app_google_calendar_callback/」と設定します．名前は任意のもので構いません．
 <div align="center">
 <img src="./images/setting_oauth_json.png" width="80%"/>
@@ -29,13 +42,13 @@ OAuth クライアントID 作成時に設定しなければならない項目�
 
 作成が完了したら，画像の赤丸で囲まれた場所をクリックします．ここで，JSONファイルがダウンロードされますので，このファイルを a-blog cms が動いているサーバにアップロードします(ブラウザからアクセスできないドキュメントルートより上の階層にアップロードすることが望ましいです)．
 
-### 2. ClientID JSON を CMS側に登録
+### 3. ClientID JSON を CMS側に登録
 a-blog cms において拡張アプリがHOOK処理を行えるように，config.server.php の設定を変更します．
 ```php
 define('HOOK_ENABLE', 1);
 ```
 
-extension/plugins に[Google Calendar for a-blog cms](https://github.com/appleple/acms-google-calendar/raw/master/build/GoogleCalendar.zip)をアップロードし，管理画面 > 拡張アプリより， Google Calendar をインストールします．インストール完了後，管理画面 > Google Calnedar より Google Calendar の管理画面に移動します(下の図)．ここで，Client ID Key Location に先ほどアップロードしたJSONファイルが存在する場所を表す絶対パスを入力し，「認証」をクリックします．認証に成功すると，認証ボタンの表示が「認証済み」に変化します．
+extension/plugins に[Google Calendar for a-blog cms](https://github.com/appleple/acms-google-calendar/raw/master/build/GoogleCalendar.zip)をアップロードし，管理画面 > 拡張アプリより， Google Calendar をインストールします．インストール完了後，管理画面 > Google Calnedar より Google Calendar の管理画面に移動します(下の図)．ここで，Client ID Key Location に先ほどアップロードしたJSONファイルが存在する場所を表す絶対パスを入力し，「保存」をクリックした後、「認証」をクリックします．認証に成功すると，「認証」の表示が「認証済み」に変化します．
 
 <div align="center">
 <img src="./images/acms_setting_oauth.png" width="80%"/>
