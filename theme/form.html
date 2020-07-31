@@ -1,6 +1,13 @@
 <h2 class="acms-admin-admin-title2">GoogleCalendar設定</h2>
 <table class="acms-admin-table-admin-edit">
 	<tr>
+		<th>Calendar ID<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="連携する Google Calendar の Calendar ID を入力します。"></i></th>
+		<td>
+			<input type="text" name="calendar_id" value="{calendar_id}" class="acms-admin-form-width-full" placeholder="例）example@group.calendar.google.com">
+			<input type="hidden" name="mail[]" value="calendar_id">
+		</td>
+	</tr>
+	<tr>
 	  <th>イベントタイトル<i class="acms-admin-icon-tooltip js-acms-tooltip" data-acms-tooltip="カレンダーに挿入するイベントのタイトルを記述します。\{変数名\}を用いて、フォーム送信時に対応する値を挿入できます。"></i></th>
 	  <td>
 		<input type="text" name="calendar_event_title" value="{calendar_event_title}" class="acms-admin-form-width-full" placeholder="例）サンプルイベント"/>
@@ -100,18 +107,6 @@
 					<input type="hidden" name="mail[]" value="calendar_event_timeZone_check" />
 				</div>
 			</div>
-		</td>
-	</tr>
-
-</table>
-
-<h2 class="acms-admin-admin-title2">Google Calendar Form 設定</h2>
-<table class="acms-admin-table-admin-edit">
-	<tr>
-		<th>Calendar ID</th>
-		<td>
-			<input type="text" name="calendar_id" value="{calendar_id}" class="acms-admin-form-width-full">
-			<input type="hidden" name="mail[]" value="calendar_id">
 		</td>
 	</tr>
 </table>
