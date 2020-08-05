@@ -42,6 +42,10 @@ OAuth クライアントID 作成時に設定しなければならない項目�
 
 作成が完了したら，画像の赤丸で囲まれた場所をクリックします．ここで，JSONファイルがダウンロードされますので，このファイルを a-blog cms が動いているサーバにアップロードします(ブラウザからアクセスできないドキュメントルートより上の階層にアップロードすることが望ましいです)．
 
+<div align="center">
+<img src="./images/download_json.png" width="80%"/>
+</div>
+
 ### 3. ClientID JSON を CMS側に登録
 a-blog cms において拡張アプリがHOOK処理を行えるように，config.server.php の設定を変更します．
 ```php
