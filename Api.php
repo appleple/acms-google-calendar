@@ -26,7 +26,6 @@ class Api
         $this->config->overload(Config::loadBlogConfig(BID));
 
         $idJsonPath = $this->config->get('calendar_clientid_json');
-        //$idJsonPath = config('calendar_clientid_json');
         $client->setApplicationName('ACMS');
         $client->setScopes($scopes);
         $this->client = $client;
@@ -39,7 +38,6 @@ class Api
         ));
         $client->setRedirectUri($redirect_uri);
         $accessToken = json_decode($this->config->get('google_calendar_accesstoken'), true);
-        //$accessToken = json_decode(config('google_calendar_accesstoken'), true);
         if ($accessToken) {
             $client->setAccessToken($accessToken);
             if ($client->isAccessTokenExpired()) {
@@ -77,7 +75,6 @@ class Api
     public function getAccessToken()
     {
         $accessToken = json_decode($this->config->get('google_calendar_accesstoken'), true);
-        //$accessToken = json_decode(config('google_calendar_accesstoken'), true);
         return $accessToken;
     }
 
