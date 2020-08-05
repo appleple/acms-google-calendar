@@ -14,9 +14,17 @@ class Hook
     {
         $moduleName = get_class($thisModule);
 
+        /* プログラム動作条件 */
         if ($moduleName !== 'ACMS_POST_Form_Submit') {
             return;
         }
+        if (!$thisModule->Post->isValidAll()) {
+            return;
+        }
+        if ($thisModule->Post->get('step') !== "result") {
+            return;
+        }
+
         $formCode = $thisModule->Post->get('id');
         try {
             $engine = new Engine($formCode, $thisModule);
