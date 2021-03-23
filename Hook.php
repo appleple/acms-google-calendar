@@ -13,6 +13,7 @@ class Hook
     public function afterPostFire($thisModule)
     {
         $moduleName = get_class($thisModule);
+        $formCode = $thisModule->Post->get('id');
 
         /* プログラム動作条件 */
         if ($moduleName !== 'ACMS_POST_Form_Submit') {
@@ -21,11 +22,12 @@ class Hook
         if (!$thisModule->Post->isValidAll()) {
             return;
         }
+        if (empty($formCode)) {
+            return;
+        }
         if ($thisModule->Post->get('step') !== "result") {
             return;
         }
-
-        $formCode = $thisModule->Post->get('id');
         try {
             $engine = new Engine($formCode, $thisModule);
             $engine->send();

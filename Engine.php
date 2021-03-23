@@ -22,8 +22,19 @@ class Engine
     protected $config;
 
     /**
+     * @var string
+     */
+    protected $code;
+
+    /**
+     * @var \ACMS_POST
+     */
+    protected $module;
+
+    /**
      * Engine constructor.
      * @param string $code
+     * @param \ACMS_POST $module
      */
     public function __construct($code, $module)
     {
@@ -69,7 +80,7 @@ class Engine
             if (!$response->valid()) {
                 throw new \RuntimeException('Failed to update the calendar.');
             }
-        }  
+        }
     }
 
     /**
@@ -154,7 +165,7 @@ class Engine
     /**
      * @param array $value
      * @param string $attendeesStr
-     * 
+     *
      * @return array
      */
     private function makeAttendeesValue($value, $attendeesStr) {
@@ -166,7 +177,7 @@ class Engine
 
         // regular expression of email
         $reg_str = "/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/";
-        
+
         foreach ($attendees as $attendee) {
             if (preg_match($reg_str, $attendee)) {
                 array_push($attendeesArray,array('email' => $attendee));
@@ -182,7 +193,7 @@ class Engine
     /**
      * @param array $value
      * @param array $dateMixArray
-     * 
+     *
      * @return array
      */
     private function makeDateValue($value, $dateMixArray) {
@@ -202,7 +213,7 @@ class Engine
                 "date" => $startDate,
                 "timeZone" => $dateMixArray["timeZoneValue"],
             ));
-    
+
             $value += array("end" => array(
                 "date" => $endDate,
                 "timeZone" => $dateMixArray["timeZoneValue"],
@@ -210,7 +221,7 @@ class Engine
         } else {
             $startDate = $dateMixArray["startDateValue"];
             $startTime = $dateMixArray["startTimeValue"];
-    
+
             if ($dateMixArray["endDateValue"]=="") {
                 $endDate = $startDate;
             } else if (substr($dateMixArray["endDateValue"], 0, 1)=="+") {
@@ -221,7 +232,7 @@ class Engine
             } else {
                 $endDate = $dateMixArray["endDateValue"];
             }
-    
+
             if ($dateMixArray["endTimeValue"]=="") {
                 $endTime = $startTime;
             } else if (substr($dateMixArray["endTimeValue"], 0, 1)=="+") {
@@ -233,12 +244,12 @@ class Engine
             } else {
                 $endTime = $dateMixArray["endTimeValue"];
             }
-    
+
             $value += array("start" => array(
                 "dateTime" => $startDate."T".$startTime,
                 "timeZone" => $dateMixArray["timeZoneValue"],
             ));
-    
+
             $value += array("end" => array(
                 "dateTime" => $endDate."T".$endTime,
                 "timeZone" => $dateMixArray["timeZoneValue"],
@@ -248,8 +259,9 @@ class Engine
     }
 
     /**
-     * @param string $date
-     * @param string $dateTime
+     * @param $date
+     * @param $dateTime
+     * @return string
      */
     private function addDateTime($date, $dateTime) {
         $dateSplit = str_replace([" ", ":"], "-", $date);

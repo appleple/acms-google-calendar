@@ -49,6 +49,10 @@ class Api
         }
     }
 
+    /**
+     * @param string $json
+     * @throws Google_Exception
+     */
     public function setAuthConfig($json)
     {
         if (!Storage::exists($json)) {
@@ -67,17 +71,26 @@ class Api
         }
     }
 
+    /**
+     * @return Google_Client
+     */
     public function getClient()
     {
         return $this->client;
     }
 
+    /**
+     * @return string
+     */
     public function getAccessToken()
     {
         $accessToken = json_decode($this->config->get('google_calendar_accesstoken'), true);
         return $accessToken;
     }
 
+    /**
+     * @param string $accessToken
+     */
     public function updateAccessToken($accessToken)
     {
         $DB = DB::singleton(dsn());
