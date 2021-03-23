@@ -8,7 +8,7 @@ use Acms\Services\Facades\Storage;
 
 class ServiceProvider extends ACMS_App
 {
-    public $version     = '1.0.16';
+    public $version     = '1.0.2';
     public $name        = 'Google Calendar';
     public $author      = 'com.appleple';
     public $module      = false;
