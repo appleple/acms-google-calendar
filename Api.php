@@ -14,6 +14,16 @@ use Google_Exception;
 class Api
 {
     /**
+     * @var \Field
+     */
+    public $config;
+
+    /**
+     * @var \Google_Client
+     */
+    public $client;
+
+    /**
      * Api constructor.
      */
     public function __construct()
@@ -43,9 +53,14 @@ class Api
             $client->setAccessToken($accessToken);
             if ($client->isAccessTokenExpired()) {
                 $refreshToken = $client->getRefreshToken();
-                $client->refreshToken($refreshToken);
-                $accessToken = $client->getAccessToken();
-                $this->updateAccessToken($accessToken);
+                try {
+                    $client->refreshToken($refreshToken);
+                    $accessToken = $client->getAccessToken();
+                    $this->updateAccessToken(json_encode($accessToken));
+                } catch (\Exception $e) {
+                    userErrorLog('ACMS Error: In GoogleCalendarReserve extension -> ' . $e->getMessage());
+                    $this->updateAccessToken('');
+                }
             }
         }
     }
@@ -105,7 +120,7 @@ class Api
 
         $InsertSQL = SQL::newInsert('config');
         $InsertSQL->addInsert('config_key', 'google_calendar_accesstoken');
-        $InsertSQL->addInsert('config_value', json_encode($accessToken));
+        $InsertSQL->addInsert('config_value', $accessToken);
         $InsertSQL->addInsert('config_blog_id', BID);
         $DB->query($InsertSQL->get(dsn()), 'exec');
     }
