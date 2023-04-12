@@ -2,6 +2,8 @@
 
 namespace Acms\Plugins\GoogleCalendar;
 
+use ACMS_POST_Form_Submit;
+
 class Hook
 {
     /**
@@ -12,22 +14,23 @@ class Hook
      */
     public function afterPostFire($thisModule)
     {
-        $moduleName = get_class($thisModule);
-        $formCode = $thisModule->Post->get('id');
-
-        /* プログラム動作条件 */
-        if ($moduleName !== 'ACMS_POST_Form_Submit') {
+        // Hook処理動作条件
+        if (!($thisModule instanceof ACMS_POST_Form_Submit)) {
             return;
         }
         if (!$thisModule->Post->isValidAll()) {
             return;
         }
-        if (empty($formCode)) {
+        $step = $thisModule->Post->get('error');
+        if (empty($step)) {
+            $step = $thisModule->Get->get('step');
+        }
+        $step = $thisModule->Post->get('step', $step);
+        if (in_array($step, ['forbidden', 'repeated'])) {
             return;
         }
-        if ($thisModule->Post->get('step') !== "result") {
-            return;
-        }
+
+        $formCode = $thisModule->Post->get('id');
         try {
             $engine = new Engine($formCode, $thisModule);
             $engine->send();
