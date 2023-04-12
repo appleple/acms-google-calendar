@@ -6,6 +6,7 @@ use Acms\Services\Facades\Storage;
 use DB;
 use SQL;
 use Config;
+use Cache;
 use Google_Client;
 use Google_Service_Calendar;
 use Google_Exception;
@@ -93,6 +94,9 @@ class Api
      */
     public function updateAccessToken($accessToken)
     {
+        if (class_exists('Cache')) {
+            Cache::flush('config');
+        }
         $DB = DB::singleton(dsn());
         $RemoveSQL = SQL::newDelete('config');
         $RemoveSQL->addWhereOpr('config_blog_id', BID);
