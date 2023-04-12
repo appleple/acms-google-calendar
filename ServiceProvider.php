@@ -4,16 +4,38 @@ namespace Acms\Plugins\GoogleCalendar;
 use ACMS_App;
 use Acms\Services\Common\HookFactory;
 use Acms\Services\Common\InjectTemplate;
-use Acms\Services\Facades\Storage;
 
 class ServiceProvider extends ACMS_App
 {
-    public $version     = '1.0.2';
-    public $name        = 'Google Calendar';
-    public $author      = 'com.appleple';
-    public $module      = false;
-    public $menu        = 'google_calendar_index';
-    public $desc        = 'フォームの内容を Google Calendarに登録するためのアプリです。';
+    /**
+     * @var string
+     */
+    public $version = '1.0.2';
+
+    /**
+     * @var string
+     */
+    public $name = 'Google Calendar';
+
+    /**
+     * @var string
+     */
+    public $author = 'com.appleple';
+
+    /**
+     * @var bool
+     */
+    public $module = false;
+
+    /**
+     * @var string
+     */
+    public $menu = 'google_calendar_index';
+
+    /**
+     * @var string
+     */
+    public $desc = 'フォームの内容を Google Calendarに登録するためのアプリです。';
 
     /**
      * サービスの起動処理
@@ -28,13 +50,13 @@ class ServiceProvider extends ACMS_App
         $inject = InjectTemplate::singleton();
 
         if (ADMIN === 'app_google_calendar_index') {
-            $inject->add('admin-topicpath', PLUGIN_DIR . 'GoogleCalendar/theme/topicpath.html');
-            $inject->add('admin-main', PLUGIN_DIR . 'GoogleCalendar/theme/index.html');
-        } else if (ADMIN === 'app_google_calendar_callback') {
-            $inject->add('admin-topicpath', PLUGIN_DIR . 'GoogleCalendar/theme/topicpath.html');
-            $inject->add('admin-main', PLUGIN_DIR . 'GoogleCalendar/theme/callback.html');
+            $inject->add('admin-topicpath', PLUGIN_DIR . 'GoogleCalendar/template/admin/topicpath.html');
+            $inject->add('admin-main', PLUGIN_DIR . 'GoogleCalendar/template/admin/main.html');
+        } elseif (ADMIN === 'app_google_calendar_callback') {
+            $inject->add('admin-topicpath', PLUGIN_DIR . 'GoogleCalendar/template/admin/topicpath.html');
+            $inject->add('admin-main', PLUGIN_DIR . 'GoogleCalendar/template/admin/callback.html');
         }
-        $inject->add('admin-form', PLUGIN_DIR . 'GoogleCalendar/theme/form.html');
+        $inject->add('admin-form', PLUGIN_DIR . 'GoogleCalendar/template/admin/form.html');
     }
     /**
      * インストールする前の環境チェック処理
