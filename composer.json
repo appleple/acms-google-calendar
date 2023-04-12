@@ -1,21 +1,28 @@
 {
   "name": "appleple/acms-google-sheets",
-  "description": "Google SpreadSheet API と連携し、お問い合わせフォームなどで送信された内容を任意のGoogle SpreadSheet の最後の行に追記することができます。",
+  "description": "Google Calendar API と連携し、お問い合わせフォームなどで送信された内容を任意のGoogleカレンダーに登録できます。",
   "keywords": [
-    "SMS", "a-blog cms"
+    "SMS",
+    "a-blog cms"
   ],
   "homepage": "https://www.a-blogcms.jp",
+  "scripts": {
+    "post-update-cmd": "Google_Task_Composer::cleanup"
+  },
+  "extra": {
+    "google/apiclient-services": [
+      "Calendar"
+    ]
+  },
   "require": {
-    "php": ">=5.4",
-    "google/apiclient": "^2.0"
+    "google/apiclient": "2.*.*"
   },
   "require-dev": {
     "phpunit/phpunit": "*"
   },
   "config": {
-    "vendor-dir": "vendor",
     "platform": {
-      "php": "5.4"
+      "php": "5.6"
     }
   }
 }
