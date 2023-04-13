@@ -58,7 +58,7 @@ class Api
                     $accessToken = $client->getAccessToken();
                     $this->updateAccessToken(json_encode($accessToken));
                 } catch (\Exception $e) {
-                    userErrorLog('ACMS Error: In GoogleCalendarReserve extension -> ' . $e->getMessage());
+                    userErrorLog('ACMS Error: In GoogleCalendar extension -> ' . $e->getMessage());
                     $this->updateAccessToken('');
                 }
             }
