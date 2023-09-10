@@ -2,15 +2,16 @@
 
 namespace Acms\Plugins\GoogleCalendar;
 
+use Google\Service\Calendar;
+use Google\Service\Calendar\Event;
 use Field;
-use Google_Service_Calendar;
-use Google_Service_Calendar_Event;
 use Common;
+use Exception;
 
 class Engine
 {
     /**
-     * @var \Field
+     * @var Field
      */
     protected $config;
 
@@ -56,13 +57,14 @@ class Engine
         if (!$client->getAccessToken()) {
             throw new \RuntimeException('Failed to get the access token.');
         }
-        $service = new Google_Service_Calendar($client);
+        $service = new Calendar($client);
         $calendarId = $this->config->get('calendar_id');
 
         if (!empty($calendarId)) {
-            $event = new Google_Service_Calendar_Event($values);
-            $response = $service->events->insert($calendarId, $event);
-            if (!$response->valid()) {
+            try {
+                $event = new Event($values);
+                $service->events->insert($calendarId, $event);
+            } catch (Exception $e) {
                 throw new \RuntimeException('Failed to update the calendar.');
             }
         }

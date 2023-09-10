@@ -7,9 +7,9 @@ use DB;
 use SQL;
 use Config;
 use Cache;
-use Google_Client;
-use Google_Service_Calendar;
-use Google_Exception;
+use Google\Client;
+use Google\Service\Calendar;
+use Google\Exception as GoogleException;
 
 class Api
 {
@@ -29,9 +29,9 @@ class Api
     public function __construct()
     {
         // 書き込み権限を指定
-        $scopes = implode(' ', array(Google_Service_Calendar::CALENDAR_EVENTS));
+        $scopes = implode(' ', array(Calendar::CALENDAR_EVENTS));
 
-        $client = new Google_Client();
+        $client = new Client();
 
         $this->config = Config::loadDefaultField();
         $this->config->overload(Config::loadBlogConfig(BID));
@@ -78,7 +78,7 @@ class Api
         $data = json_decode($json);
         $key = isset($data->installed) ? 'installed' : 'web';
         if (!isset($data->$key)) {
-            throw new Google_Exception("Invalid client secret JSON file.");
+            throw new GoogleException("Invalid client secret JSON file.");
         }
         $this->client->setClientId($data->$key->client_id);
         $this->client->setClientSecret($data->$key->client_secret);

@@ -8,8 +8,8 @@
 
 ## 動作環境
 
-- a-blog cms >=Ver.2.8.0
-- php >=5.6
+- a-blog cms >= Ver. 3.1.0
+- php >= 7.2.5
 
 ## 準備
 
