@@ -18,6 +18,18 @@ class Hook
         if (!($thisModule instanceof ACMS_POST_Form_Submit)) {
             return;
         }
+
+        if (!$thisModule->Post->get('id')) {
+            return;
+        }
+        if ($thisModule
+            ->loadForm($thisModule->Post->get('id'))['data']
+            ->getChild('mail')
+            ->get('calendar_void')
+            !== 'on'
+        ) {
+            return;
+        };
         if (!$thisModule->Post->isValidAll()) {
             return;
         }
@@ -31,6 +43,7 @@ class Hook
         }
 
         $formCode = $thisModule->Post->get('id');
+
         try {
             $engine = new Engine($formCode, $thisModule);
             $engine->send();

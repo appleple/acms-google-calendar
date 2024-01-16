@@ -1,5 +1,23 @@
-<h2 class="acms-admin-admin-title2">GoogleCalendar設定</h2>
+<h2 class="acms-admin-admin-title2">Google Calendar設定</h2>
 <table class="acms-admin-table-admin-edit">
+  <tr>
+    <th>
+      Google Calendar連携<i
+        class="acms-admin-icon-tooltip js-acms-tooltip js-acms-tooltip-hover"
+        data-acms-tooltip="チェックをすると、Google Calendarの連携が有効になります。"
+      ></i>
+    </th>
+    <td>
+      <div class="acms-admin-form-checkbox">
+        <input type="hidden" name="calendar_void" value="off" id="input-calendar_void">
+        <input type="checkbox" name="calendar_void" value="on"{calendar_void:checked#on} id="input-calendar_void">
+        <label for="input-calendar_void">
+          <i class="acms-admin-ico-checkbox"></i>有効
+        </label>
+      </div>
+      <input type="hidden" name="mail[]" value="calendar_void">
+    </td>
+  </tr>
   <tr>
     <th>
       Calendar ID<i

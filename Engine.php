@@ -41,7 +41,6 @@ class Engine
     public function send()
     {
         $field = $this->module->Post->getChild('field');
-
         $values = $this->makeCalendarValues($field);
         $this->update($values);
     }
