@@ -18,16 +18,15 @@ class Hook
         if (!($thisModule instanceof ACMS_POST_Form_Submit)) {
             return;
         }
-
-        if (!$thisModule->Post->get('id')) {
+        $id = $thisModule->Post->get('id');
+        if (!$id) {
             return;
         }
-        if ($thisModule
-            ->loadForm($thisModule->Post->get('id'))['data']
-            ->getChild('mail')
-            ->get('calendar_void')
-            !== 'on'
-        ) {
+        $info = $thisModule->loadForm($id);
+        if (empty($info)) {
+            return;
+        }
+        if ($info['data']->getChild('mail')->get('calendar_void') !== 'on') {
             return;
         };
         if (!$thisModule->Post->isValidAll()) {
