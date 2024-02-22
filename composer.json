@@ -7,7 +7,7 @@
   ],
   "homepage": "https://www.a-blogcms.jp",
   "scripts": {
-    "post-update-cmd": "Google_Task_Composer::cleanup"
+    "pre-autoload-dump": "Google\\Task\\Composer::cleanup"
   },
   "extra": {
     "google/apiclient-services": [
