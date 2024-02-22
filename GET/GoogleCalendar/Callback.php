@@ -3,8 +3,6 @@
 namespace Acms\Plugins\GoogleCalendar\GET\GoogleCalendar;
 
 use ACMS_GET;
-use Template;
-use ACMS_Corrector;
 use Acms\Plugins\GoogleCalendar\Api;
 
 class Callback extends ACMS_GET
