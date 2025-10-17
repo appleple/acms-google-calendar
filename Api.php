@@ -2,7 +2,7 @@
 
 namespace Acms\Plugins\GoogleCalendar;
 
-use Storage;
+use Acms\Services\Facades\Storage;
 use DB;
 use SQL;
 use Config;
