@@ -2,7 +2,7 @@
 
 namespace Acms\Plugins\GoogleCalendar;
 
-use Acms\Services\Facades\Storage;
+use Storage;
 use DB;
 use SQL;
 use Config;
@@ -71,7 +71,7 @@ class Api
      */
     public function setAuthConfig($json)
     {
-        if (!Storage::exists($json)) {
+        if (!Storage::isFile($json)) {
             throw new \RuntimeException('Failed to open ' . $json);
         }
         $json = file_get_contents($json);
