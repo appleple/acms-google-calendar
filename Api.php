@@ -71,7 +71,7 @@ class Api
      */
     public function setAuthConfig($json)
     {
-        if (!Storage::exists($json)) {
+        if (!Storage::isFile($json)) {
             throw new \RuntimeException('Failed to open ' . $json);
         }
         $json = file_get_contents($json);
