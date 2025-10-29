@@ -15,15 +15,16 @@
     ]
   },
   "require": {
-    "php": ">=7.2.5",
-    "google/apiclient": "^2.14"
+    "php": ">=8.1",
+    "google/apiclient": "^2.18"
   },
   "require-dev": {
-    "phpunit/phpunit": "*"
+    "phpunit/phpunit": "*",
+    "rector/rector": "^2.2"
   },
   "config": {
     "platform": {
-      "php": "7.2.5"
+      "php": "8.1"
     }
   }
 }

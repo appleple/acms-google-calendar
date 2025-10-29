@@ -21,6 +21,7 @@ node_modules/
 # PHP
 vendor
 .phplint-cache
+.phpunit.result.cache
 
 ## app
 /GoogleCalendar

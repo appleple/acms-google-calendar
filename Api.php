@@ -100,8 +100,7 @@ class Api
      */
     public function getAccessToken()
     {
-        $accessToken = json_decode($this->config->get('google_calendar_accesstoken'), true);
-        return $accessToken;
+        return json_decode($this->config->get('google_calendar_accesstoken'), true);
     }
 
     /**
