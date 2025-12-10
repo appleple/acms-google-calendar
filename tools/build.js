@@ -29,6 +29,8 @@ const ignores = [
   '.phplint-cache',
   'phpmd.log',
   'tools',
+  '.phpunit.result.cache',
+  'rector.php'
 ];
 
 co(function* () {
