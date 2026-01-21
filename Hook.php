@@ -2,6 +2,8 @@
 
 namespace Acms\Plugins\GoogleCalendar;
 
+use Acms\Services\Facades\Logger;
+use Acms\Services\Facades\Common;
 use ACMS_POST_Form_Submit;
 
 class Hook
@@ -46,8 +48,8 @@ class Hook
         try {
             $engine = new Engine($formCode, $thisModule);
             $engine->send();
-        } catch (\Exception $e) {
-            userErrorLog('ACMS Warning: Google Calendar plugin, ' . $e->getMessage());
+        } catch (\Throwable $th) {
+            Logger::error('【GoogleCalendar】GoogleCalendar へのデータ登録に失敗しました。', Common::exceptionArray($th));
         }
     }
 }

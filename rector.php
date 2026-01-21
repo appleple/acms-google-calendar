@@ -1,7 +1,6 @@
 <?php
 
 use Rector\Config\RectorConfig;
-use Rector\Set\ValueObject\SetList;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -14,4 +13,3 @@ return RectorConfig::configure()
         __DIR__ . '/ServiceProvider.php',
     ])
     ->withPreparedSets(deadCode: true);
-

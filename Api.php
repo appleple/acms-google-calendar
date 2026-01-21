@@ -2,14 +2,15 @@
 
 namespace Acms\Plugins\GoogleCalendar;
 
-use Acms\Services\Facades\Storage;
-use DB;
-use SQL;
-use Config;
-use Cache;
 use Google\Client;
 use Google\Service\Calendar;
 use Google\Exception as GoogleException;
+use Acms\Services\Facades\Storage;
+use Acms\Services\Facades\Database as DB;
+use Acms\Services\Facades\Config;
+use Acms\Services\Facades\Cache;
+use Acms\Services\Facades\Logger;
+use SQL;
 
 class Api
 {
@@ -58,7 +59,7 @@ class Api
                     $accessToken = $client->getAccessToken();
                     $this->updateAccessToken(json_encode($accessToken));
                 } catch (\Exception $e) {
-                    userErrorLog('ACMS Error: In GoogleCalendar extension -> ' . $e->getMessage());
+                    Logger::error('【GoogleCalendar】アクセストークンのリフレッシュに失敗しました。', Common::exceptionArray($e));
                     $this->updateAccessToken('');
                 }
             }

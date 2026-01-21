@@ -4,9 +4,8 @@ namespace Acms\Plugins\GoogleCalendar;
 
 use Google\Service\Calendar;
 use Google\Service\Calendar\Event;
+use Acms\Services\Facades\Common;
 use Field;
-use Common;
-use Exception;
 
 class Engine
 {
@@ -16,19 +15,19 @@ class Engine
     protected $config;
 
     /**
-     * @var \ACMS_POST
+     * @var \ACMS_POST_Form
      */
     protected $module;
 
     /**
      * Engine constructor.
      * @param string $code
-     * @param \ACMS_POST $module
+     * @param \ACMS_POST_Form $module
      */
     public function __construct($code, $module)
     {
         $info = $module->loadForm($code);
-        if (empty($info)) {
+        if ($info === false) {
             throw new \RuntimeException('Not Found Form.');
         }
         $this->config = $info['data']->getChild('mail');
@@ -59,13 +58,9 @@ class Engine
         $service = new Calendar($client);
         $calendarId = $this->config->get('calendar_id');
 
-        if (!empty($calendarId)) {
-            try {
-                $event = new Event($values);
-                $service->events->insert($calendarId, $event);
-            } catch (Exception $e) {
-                throw new \RuntimeException('Failed to update the calendar.');
-            }
+        if ($calendarId !== '') {
+            $event = new Event($values);
+            $service->events->insert($calendarId, $event);
         }
     }
 
