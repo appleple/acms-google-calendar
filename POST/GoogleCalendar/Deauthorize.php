@@ -1,4 +1,5 @@
 <?php
+
 namespace Acms\Plugins\GoogleCalendar\POST\GoogleCalendar;
 
 use ACMS_POST;
@@ -31,13 +32,14 @@ class Deauthorize extends ACMS_POST
      */
     protected function deleteAccessToken()
     {
-        if (class_exists('Cache')) {
-            Cache::flush('config');
-        }
         $DB = DB::singleton(dsn());
         $RemoveSQL = SQL::newDelete('config');
         $RemoveSQL->addWhereOpr('config_blog_id', BID);
-        $RemoveSQL->addWhereOpr('config_key', 'google_calendar_accesstoken');
+        $RemoveSQL->addWhereIn('config_key', ['google_calendar_accesstoken', 'google_calendar_refreshtoken']);
         $DB->query($RemoveSQL->get(dsn()), 'exec');
+
+        if (class_exists('Cache')) {
+            Cache::flush('config');
+        }
     }
 }

@@ -32,35 +32,46 @@ class Api
         // 書き込み権限を指定
         $scopes = implode(' ', array(Calendar::CALENDAR_EVENTS));
 
-        $client = new Client();
+        $this->client = new Client();
 
         $this->config = Config::loadDefaultField();
         $this->config->overload(Config::loadBlogConfig(BID));
 
         $idJsonPath = $this->config->get('calendar_clientid_json');
-        $client->setApplicationName('ACMS');
-        $client->setScopes($scopes);
-        $this->client = $client;
+        $this->client->setApplicationName('ACMS');
+        $this->client->setScopes($scopes);
         $this->setAuthConfig($idJsonPath);
-        $client->setAccessType('offline');
-        $client->setApprovalPrompt("force");
+        $this->client->setAccessType('offline');
+        $this->client->setPrompt("consent");
         $redirect_uri = acmsLink(array(
             'bid' => BID,
             'admin' => 'app_google_calendar_callback',
         ));
-        $client->setRedirectUri($redirect_uri);
-        $accessToken = json_decode($this->config->get('google_calendar_accesstoken'), true);
+        $this->client->setRedirectUri($redirect_uri);
+
+        $accessTokenJson = $this->config->get('google_calendar_accesstoken');
+        $accessToken = $accessTokenJson ? json_decode($accessTokenJson, true) : null;
+        if ($accessTokenJson && json_last_error() !== JSON_ERROR_NONE) {
+            $accessToken = null;
+        }
+        $refreshTokenJson = $this->config->get('google_calendar_refreshtoken');
+        $refreshToken = $refreshTokenJson ? json_decode($refreshTokenJson, true) : null;
+        if ($refreshTokenJson && json_last_error() !== JSON_ERROR_NONE) {
+            $refreshToken = null;
+        }
         if ($accessToken) {
-            $client->setAccessToken($accessToken);
-            if ($client->isAccessTokenExpired()) {
-                $refreshToken = $client->getRefreshToken();
+            $this->client->setAccessToken($accessToken);
+            if ($this->client->isAccessTokenExpired()) {
                 try {
-                    $client->refreshToken($refreshToken);
-                    $accessToken = $client->getAccessToken();
-                    $this->updateAccessToken(json_encode($accessToken));
+                    $this->client->refreshToken($refreshToken);
+                    $accessToken = $this->client->getAccessToken();
+                    $refreshToken = $this->client->getRefreshToken();
+                    $this->updateAccessToken(json_encode($accessToken), json_encode($refreshToken));
                 } catch (\Exception $e) {
-                    Logger::error('【GoogleCalendar】アクセストークンのリフレッシュに失敗しました。', Common::exceptionArray($e));
-                    $this->updateAccessToken('');
+                    Logger::error(
+                        '【Google Calendar】アクセストークンの更新に失敗しました。',
+                        Common::exceptionArray($e)
+                    );
                 }
             }
         }
@@ -97,31 +108,53 @@ class Api
     }
 
     /**
-     * @return string
+     * @return array|null
      */
-    public function getAccessToken()
+    public function getAccessToken(): ?array
     {
-        return json_decode($this->config->get('google_calendar_accesstoken'), true);
+        $accessTokenJson = $this->config->get('google_calendar_accesstoken');
+        $accessToken = $accessTokenJson ? json_decode($accessTokenJson, true) : null;
+        if ($accessTokenJson && json_last_error() !== JSON_ERROR_NONE) {
+            $accessToken = null;
+        }
+        return $accessToken;
     }
 
     /**
-     * @param string $accessToken
+     * @param string|null $accessToken
+     * @param string|null $refreshToken
+     * @return void
      */
-    public function updateAccessToken($accessToken)
+    public function updateAccessToken(?string $accessToken, ?string $refreshToken): void
     {
+        if (!!$accessToken) {
+            $DB = DB::singleton(dsn());
+            $RemoveSQL = SQL::newDelete('config');
+            $RemoveSQL->addWhereOpr('config_blog_id', BID);
+            $RemoveSQL->addWhereOpr('config_key', 'google_calendar_accesstoken');
+            $DB->query($RemoveSQL->get(dsn()), 'exec');
+
+            $InsertSQL = SQL::newInsert('config');
+            $InsertSQL->addInsert('config_key', 'google_calendar_accesstoken');
+            $InsertSQL->addInsert('config_value', $accessToken);
+            $InsertSQL->addInsert('config_blog_id', BID);
+            $DB->query($InsertSQL->get(dsn()), 'exec');
+        }
+        if (!!$refreshToken) {
+            $DB = DB::singleton(dsn());
+            $RemoveSQL = SQL::newDelete('config');
+            $RemoveSQL->addWhereOpr('config_blog_id', BID);
+            $RemoveSQL->addWhereOpr('config_key', 'google_calendar_refreshtoken');
+            $DB->query($RemoveSQL->get(dsn()), 'exec');
+
+            $InsertSQL = SQL::newInsert('config');
+            $InsertSQL->addInsert('config_key', 'google_calendar_refreshtoken');
+            $InsertSQL->addInsert('config_value', $refreshToken);
+            $InsertSQL->addInsert('config_blog_id', BID);
+            $DB->query($InsertSQL->get(dsn()), 'exec');
+        }
         if (class_exists('Cache')) {
             Cache::flush('config');
         }
-        $DB = DB::singleton(dsn());
-        $RemoveSQL = SQL::newDelete('config');
-        $RemoveSQL->addWhereOpr('config_blog_id', BID);
-        $RemoveSQL->addWhereOpr('config_key', 'google_calendar_accesstoken');
-        $DB->query($RemoveSQL->get(dsn()), 'exec');
-
-        $InsertSQL = SQL::newInsert('config');
-        $InsertSQL->addInsert('config_key', 'google_calendar_accesstoken');
-        $InsertSQL->addInsert('config_value', $accessToken);
-        $InsertSQL->addInsert('config_blog_id', BID);
-        $DB->query($InsertSQL->get(dsn()), 'exec');
     }
 }
