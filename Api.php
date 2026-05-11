@@ -10,6 +10,7 @@ use Acms\Services\Facades\Database as DB;
 use Acms\Services\Facades\Config;
 use Acms\Services\Facades\Cache;
 use Acms\Services\Facades\Logger;
+use Acms\Services\Facades\Common;
 use SQL;
 
 class Api
