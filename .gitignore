@@ -25,3 +25,7 @@ vendor
 
 ## app
 /GoogleCalendar
+
+/build/
+/vendor/
+/src/vendor/

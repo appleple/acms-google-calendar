@@ -4,7 +4,7 @@
 
 ## ダウンロード
 
-[Google Calendar for a-blog cms](https://github.com/appleple/acms-google-calendar/raw/master/build/GoogleCalendar.zip)
+[Google Calendar for a-blog cms](https://github.com/appleple/acms-google-calendar/releases/latest/download/GoogleCalendar.zip)
 
 ## 動作環境
 
@@ -64,7 +64,7 @@ a-blog cms において拡張アプリが HOOK 処理を行えるように，con
 define('HOOK_ENABLE', 1);
 ```
 
-extension/plugins に[Google Calendar for a-blog cms](https://github.com/appleple/acms-google-calendar/raw/master/build/GoogleCalendar.zip)をアップロードし、管理画面 > 拡張アプリより、 Google Calendar をインストールします。インストール完了後、管理画面 > Google Calendar より Google Calendar の管理画面に移動します(下の図)。ここで、Client ID Key Location に先ほどアップロードした JSON ファイルが存在する場所を表す絶対パスを入力し、「保存」をクリックした後、「認証」をクリックします。認証に成功すると、「認証」の表示が「認証済み」に変化します。
+extension/plugins に[Google Calendar for a-blog cms](https://github.com/appleple/acms-google-calendar/releases/latest/download/GoogleCalendar.zip)をアップロードし、管理画面 > 拡張アプリより、 Google Calendar をインストールします。インストール完了後、管理画面 > Google Calendar より Google Calendar の管理画面に移動します(下の図)。ここで、Client ID Key Location に先ほどアップロードした JSON ファイルが存在する場所を表す絶対パスを入力し、「保存」をクリックした後、「認証」をクリックします。認証に成功すると、「認証」の表示が「認証済み」に変化します。
 
 <div align="center">
 <img src="./images/acms_setting_oauth.png" width="80%"/>
