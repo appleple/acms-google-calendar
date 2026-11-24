@@ -27,7 +27,6 @@ class Callback extends ACMS_GET
         if (
             !is_string($expectedState)
             || $expectedState === ''
-            || !is_string($state)
             || !hash_equals($expectedState, $state)
         ) {
             Logger::notice('【Google Calendar plugin】OAuth の state が一致しないため、処理を中断しました。', ['module' => static::class]);
